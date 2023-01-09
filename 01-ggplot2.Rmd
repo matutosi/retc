@@ -1,5 +1,10 @@
 # ggplot2の勧め {#ggplot2}
 
+<!--
+![](images/tools_list01.png){ width=70% }
+<img src="images/tools_list01.png" width="30%">
+-->
+
 
 ## Rの作図環境の概要
 
