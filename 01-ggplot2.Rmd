@@ -72,6 +72,8 @@ forループやsubset，あるいはdplyr::filterを使っていたものが，�
 
 ## themeを少しだけ説明
 
+- デフォルト   
+- theme_bw()   
 
 
 ## 参考書
