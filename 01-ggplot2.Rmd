@@ -64,6 +64,11 @@ forループやsubset，あるいはdplyr::filterを使っていたものが，�
 
 ## ggsave
 
+- pngとPDF   
+PDFで日本語文字が化ける場合は，pngを使う
+
+- 指定しないと，直前のプロット   
+
 
 
 ## 文字化けへの対処(windows)
