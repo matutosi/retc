@@ -63,6 +63,7 @@ size
 forループやsubset，あるいはdplyr::filterを使っていたものが，一気にできて便利
 コードも簡単で見やすい
 
+group VS facet
 
 ## ggsave
 
