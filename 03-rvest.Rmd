@@ -60,6 +60,7 @@ CRANには，植生データの取得のためのパッケージがある．
 - stringrと組み合わせて使うと良い   
 - 文字コードの変換にはstringiを用いる   
 - tidyverseやmagrittrとの合せ技が便利    
+- Formの入力・選択
 
 
 ## 準備
