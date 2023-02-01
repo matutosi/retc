@@ -62,6 +62,8 @@ CRANには，植生データの取得のためのパッケージがある．
 - tidyverseやmagrittrとの合せ技が便利    
 - Formの入力・選択
 radioボタンはちょっと工夫が必要
+moranajp::html_radio_set()
+
 
 
 ## 準備
