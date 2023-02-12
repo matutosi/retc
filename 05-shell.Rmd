@@ -49,7 +49,13 @@ purrr::map()
 
 その他ツール
 concatPDF
-  PDFの結合など
+  PDFの結合など(win10 OK，win11 NG)
+  # ConcatPDF /outfile Merged.pdf File1.pdf File2.pdf File3.pdf
+ 
+pdftk
+  PDFの結合など(win11 OK)
+  pdftk File1.pdf File2.pdf File3.pdf cat output Merged.pdf
+
 ImageMagick
   画像変換など
 
