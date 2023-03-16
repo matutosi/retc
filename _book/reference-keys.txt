@@ -41,3 +41,10 @@ section-2
 その他
 how-to-use-biodiversity-investigation-support-system-biss
 初期画面
+install
+shiny
+shell
+準備-2
+ダウンロード
+インストーラの起動
+インストール完了
