@@ -1,4 +1,13 @@
 delete_merged_file: true
+new_session: true
 language:
   ui:
     chapter_name: "Chapter "
+
+rmd_files:
+- "00-install.Rmd"
+- "01-ggplot2.Rmd"
+- "02-magrittr.Rmd"
+- "03-rvest.Rmd"
+- "04-rselenium.Rmd"
+- "05-shell.Rmd"

@@ -97,11 +97,11 @@ mpg # 燃費データ
 
 ```{r}
 
-mpg %T>%
-  {
-    tmp <<- dplyr::select(., ) 
-  } %>%
-  
+#  mpg %T>%
+#    {
+#      tmp <<- dplyr::select(., ) 
+#    } %>%
+
   
 ```
 
