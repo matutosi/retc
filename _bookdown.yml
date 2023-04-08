@@ -7,6 +7,8 @@ language:
 rmd_files:
 - "index.Rmd"
 - "install.Rmd"
+- "package.Rmd"
+- "assoc.Rmd"
 - "ggplot2.Rmd"
 - "magrittr.Rmd"
 - "rvest.Rmd"
