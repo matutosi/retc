@@ -16,7 +16,7 @@ https://cran.r-project.org/web/packages/available_packages_by_name.html
 
 CRANに掲載されており，パッケージの名前がわかっていたら，以下のようにすればインストールできる．
 
-```{r}
+```{r eval = FALSE}
   # ミラーサイト(ダウンロード元)の設定
 options(repos = "https://cran.ism.ac.jp/")
   # 1つの場合
@@ -33,7 +33,7 @@ install.packages(pkg)
 たいていはCRANに登録されているが，GitHubにしかないパッケージもある．
 その場合には，以下のようにする．
 
-```{r}
+```{r eval = FALSE}
 install.packages("devtools")
 devtools::install_github("matutosi/ecan")
 ```
