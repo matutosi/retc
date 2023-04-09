@@ -2,13 +2,14 @@ bookdown::gitbook:
   css: style.css
   split_by: chapter
   config:
+    toc_depth: 3
     toc:
       collapse: section
       scroll_highlight: yes
       before: null
       after: null
     edit: null
-    download: ["epub", "mobi"]
+    download: null # ["epub", "mobi"]
     search: yes
     sharing: null
 bookdown::epub_book: default

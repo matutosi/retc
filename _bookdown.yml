@@ -2,7 +2,7 @@ delete_merged_file: true
 new_session: true
 language:
   ui:
-    chapter_name: "Chapter "
+    chapter_name: "Chap. "
 
 rmd_files:
 - "index.Rmd"
@@ -15,3 +15,4 @@ rmd_files:
 - "rselenium.Rmd"
 - "shell.Rmd"
 - "dbi.Rmd"
+- "xlsx.Rmd"
