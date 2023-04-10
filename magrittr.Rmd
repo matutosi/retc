@@ -1,16 +1,14 @@
 # magrritrの勧め {#magrittr}
 
 
-
 ## tidyverseとmagrittr
 
 tidyverseは，Rでのデータ解析には欠かせないものになっている．
 そこで，Rを起動時にtidyverseを読み込む人は多いだろう．
 なお，tidyverseは1つのライブラリではなく，複数のライブラリからなる．
 
-```{r}
+```{r message = FALSE}
 library(tidyverse)
-library(magrittr)
 ```
 
 これらのライブラリの多く(forcats，tibble，stringr，dplyr，tidyr，purrr)で，`%>%` (パイプ)を使うことができる．

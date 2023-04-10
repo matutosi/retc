@@ -1,0 +1,48 @@
+# reticulate
+
+RとPythonのパッケージは，相互に移植されていることが多い．
+例えば，Pythonのlogging(とRのfutile.logger)をもとにRのパッケージloggerは開発されている．
+https://cran.r-project.org/web/packages/logger/index.html
+また，Rのggplot2やdplyrはPythonにも移植されている．
+
+ただし，どちらかでしか利用できなかったり，使用方法が難しかったりする．
+Rでの実行は困難でもPythonなら簡単に実行できるのであれば，Pythonを勉強して直接実行すれば良い．
+しかし，ちょっとだけ使いたいというときには，Rのパッケージreticulateを使うのが良い．
+reticulateは，
+
+## 準備：Pythonのインストール
+
+
+
+## 
+
+  # reticulate というより shellのところ?
+```
+wd <- "D:/matu/work/tmp"
+setwd(wd)
+system("c:/windows/py.exe pdf.py", intern = TRUE)
+shell("pdf.py")
+```
+
+準備
+- Pythonのインストール   
+- pdf2docxのインストール   
+```
+pip install pdf2docx
+```
+
+```{r eval = FALSE}
+  # pdf2docxの読み込みでエラー
+  # library(reticulate)
+  # reticulate::py_install("pdf2docx")
+  # reticulate::py_run_string("from pdf2docx import parse")
+  # reticulate::py_run_string("pdf_file = 'D:/matu/work/tmp/stamp.pdf'")
+  # reticulate::py_run_string("docx_file = 'D:/matu/work/tmp/stamp.docx'")
+  # reticulate::py_run_string("parse(pdf_file, docx_file, start=0, end=2)")
+```
+
+
+from pdf2docx import parse
+pdf_file = 'D:/02ecology.pdf'
+docx_file = 'D:/02ecology.docx'
+parse(pdf_file, docx_file)
