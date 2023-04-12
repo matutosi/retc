@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chap. 3 スクリプトの関連付け | Rにる作業の自動化・効率化 -各種パッケージの活用方法-</title>
-  <meta name="description" content="Chap. 3 スクリプトの関連付け | Rにる作業の自動化・効率化 -各種パッケージの活用方法-" />
+  <title>Chap. 12 qpdfでPDF操作 | Rにる作業の自動化・効率化 -各種パッケージの活用方法-</title>
+  <meta name="description" content="Chap. 12 qpdfでPDF操作 | Rにる作業の自動化・効率化 -各種パッケージの活用方法-" />
   <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chap. 3 スクリプトの関連付け | Rにる作業の自動化・効率化 -各種パッケージの活用方法-" />
+  <meta property="og:title" content="Chap. 12 qpdfでPDF操作 | Rにる作業の自動化・効率化 -各種パッケージの活用方法-" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chap. 3 スクリプトの関連付け | Rにる作業の自動化・効率化 -各種パッケージの活用方法-" />
+  <meta name="twitter:title" content="Chap. 12 qpdfでPDF操作 | Rにる作業の自動化・効率化 -各種パッケージの活用方法-" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="package.html"/>
-<link rel="next" href="ggplot2.html"/>
+<link rel="prev" href="xlsx.html"/>
+<link rel="next" href="pdf2docx.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -268,45 +268,72 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="assoc" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">Chap. 3</span> スクリプトの関連付け<a href="assoc.html#assoc" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>Rのプログラムのファイルは拡張子「script.R」のように「R」という拡張子を付けて保存することが多い．
-「<em>.docx」をワードで，「</em>.xlsx」をエクセルで開くのと同様に，私は「*．R」をテキストエディタで開くするように設定している．
-その後，開いたファイルをRのコンソールに貼り付けて，プログラムを実行する．</p>
-<p>このような使い方でもちろん良いのだが，内容を変更しないのであれば面倒臭い．
-つまり，ファイルをクリックするだけで，プログラムが実行されれば便利である．
-プログラムをRに関連付けれることで，これが実現できる．</p>
-<ol style="list-style-type: decimal">
-<li>プログラムのファイル名を「<em>.R」から「</em>.scr」に変更する(「scr」は大文字小文字は関係なく，「Rsc」や「RSC」などでもOK)．<br />
-<img src="img/assoc_01.png" style="width:30.0%" /></li>
-<li>拡張子が表示されていない場合は，エクスプローラの表示のオプションで，「登録されている拡張子は表示しない」のチェックを外して(チェックしないで)，「OK」を選択してから，名前を変更する．<br />
-<img src="img/assoc_00_01.png" style="width:40.0%" />
-<img src="img/assoc_00_02.png" style="width:40.0%" /></li>
-<li>ファイルを右クリックして，「プロパティ」を選択．<br />
-<img src="img/assoc_02.png" style="width:30.0%" /></li>
-<li>「全般」タブのやや上にあるプログラムの「変更」を選択．<br />
-<img src="img/assoc_03.png" style="width:50.0%" /></li>
-<li>「PCでアプリを選択する」をクリック．<br />
-<img src="img/assoc_04.png" style="width:50.0%" /></li>
-<li>ファイル選択画面で，Rをインストールしたフォルダまで辿っていき(「c:\Program files\R\R-4.2.3\bin\x64」など)，「Rscript.exe」を選択する．<br />
-<img src="img/assoc_05.png" style="width:50.0%" /></li>
-<li>「.rscファイルの既定のアプリを選択する」で「R for windows front-end」が表示されるので，「既定値を設定する」を選択．<br />
-<img src="img/assoc_06.png" style="width:50.0%" /></li>
-<li>全般タブのプログラムが「R for windows front-end」になっていることを確認して．「OK」を選択．<br />
-<img src="img/assoc_07.png" style="width:50.0%" /></li>
-<li>ファイルのアイコンがRのアイコンになっていたらOK．<br />
-<img src="img/assoc_08.png" style="width:30.0%" /></li>
-</ol>
-<p>ダブルクリックすると，ファイルの内容が実行される(はず)．</p>
+<div id="qpdf" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">Chap. 12</span> qpdfでPDF操作<a href="qpdf.html#qpdf" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="関数一覧" class="section level2 hasAnchor" number="12.1">
+<h2><span class="header-section-number">12.1</span> 関数一覧<a href="qpdf.html#関数一覧" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="qpdf.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(qpdf)</span>
+<span id="cb33-2"><a href="qpdf.html#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="qpdf.html#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># PDFのページ数取得，show the number of pages in a pdf</span></span>
+<span id="cb33-4"><a href="qpdf.html#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_length</span>(input, <span class="at">password =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb33-5"><a href="qpdf.html#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="qpdf.html#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># PDFを1ページずつ別ファイルに分割，split a single pdf into separate files, one for each page</span></span>
+<span id="cb33-7"><a href="qpdf.html#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_split</span>(input, <span class="at">output =</span> <span class="cn">NULL</span>, <span class="at">password =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb33-8"><a href="qpdf.html#cb33-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-9"><a href="qpdf.html#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># PDFから指定ページを抽出，create a new pdf with a subset of the input pages</span></span>
+<span id="cb33-10"><a href="qpdf.html#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_subset</span>(input, <span class="at">pages =</span> <span class="dv">1</span>, <span class="at">output =</span> <span class="cn">NULL</span>, <span class="at">password =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb33-11"><a href="qpdf.html#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="qpdf.html#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 複数のPDFを1つに結合，join several pdf files into one</span></span>
+<span id="cb33-13"><a href="qpdf.html#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_combine</span>(input, <span class="at">output =</span> <span class="cn">NULL</span>, <span class="at">password =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb33-14"><a href="qpdf.html#cb33-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-15"><a href="qpdf.html#cb33-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># PDFの圧縮，compress or linearize a pdf file</span></span>
+<span id="cb33-16"><a href="qpdf.html#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_compress</span>(input, <span class="at">output =</span> <span class="cn">NULL</span>, <span class="at">linearize =</span> <span class="cn">FALSE</span>, <span class="at">password =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb33-17"><a href="qpdf.html#cb33-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-18"><a href="qpdf.html#cb33-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 指定ページを回転，rotate selected pages</span></span>
+<span id="cb33-19"><a href="qpdf.html#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_rotate_pages</span>(input, pages, <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">relative =</span> <span class="cn">FALSE</span>, <span class="at">output =</span> <span class="cn">NULL</span>, <span class="at">password =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb33-20"><a href="qpdf.html#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="qpdf.html#cb33-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># PDFを重ね合わせ</span></span>
+<span id="cb33-22"><a href="qpdf.html#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_overlay_stamp</span>(input, stamp, <span class="at">output =</span> <span class="cn">NULL</span>, <span class="at">password =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="qpdf.html#cb34-1" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="st">&quot;&quot;</span></span>
+<span id="cb34-2"><a href="qpdf.html#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_split</span>(input, <span class="at">output =</span> <span class="st">&quot;d:/&quot;</span>, <span class="at">password =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb34-3"><a href="qpdf.html#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="qpdf.html#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; </span></span>
+<span id="cb34-5"><a href="qpdf.html#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; </span></span>
+<span id="cb34-6"><a href="qpdf.html#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; </span></span>
+<span id="cb34-7"><a href="qpdf.html#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; </span></span>
+<span id="cb34-8"><a href="qpdf.html#cb34-8" aria-hidden="true" tabindex="-1"></a>add_page_num <span class="ot">&lt;-</span> <span class="cf">function</span>(input, <span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="fu">length</span>(input)){</span>
+<span id="cb34-9"><a href="qpdf.html#cb34-9" aria-hidden="true" tabindex="-1"></a>  qpdf<span class="sc">::</span><span class="fu">pdf_length</span>(input)</span>
+<span id="cb34-10"><a href="qpdf.html#cb34-10" aria-hidden="true" tabindex="-1"></a>  qpdf<span class="sc">::</span><span class="fu">pdf_length</span>(stamp)</span>
+<span id="cb34-11"><a href="qpdf.html#cb34-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-12"><a href="qpdf.html#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; </span></span>
+<span id="cb34-13"><a href="qpdf.html#cb34-13" aria-hidden="true" tabindex="-1"></a>add_each_stamps <span class="ot">&lt;-</span> <span class="cf">function</span>(input, stamp){</span>
+<span id="cb34-14"><a href="qpdf.html#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">&quot;D:/matu/work/tmp&quot;</span>)</span>
+<span id="cb34-15"><a href="qpdf.html#cb34-15" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="st">&quot;input.pdf&quot;</span></span>
+<span id="cb34-16"><a href="qpdf.html#cb34-16" aria-hidden="true" tabindex="-1"></a>stamp <span class="ot">&lt;-</span> <span class="st">&quot;stamp.pdf&quot;</span></span>
+<span id="cb34-17"><a href="qpdf.html#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(qpdf<span class="sc">::</span><span class="fu">pdf_length</span>(input) <span class="sc">&gt;</span> qpdf<span class="sc">::</span><span class="fu">pdf_length</span>(stamp)){</span>
+<span id="cb34-18"><a href="qpdf.html#cb34-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">error</span>(<span class="st">&quot;Total page number of stamp must be equal or bigger than input!&quot;</span>)</span>
+<span id="cb34-19"><a href="qpdf.html#cb34-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb34-20"><a href="qpdf.html#cb34-20" aria-hidden="true" tabindex="-1"></a>  pages <span class="ot">&lt;-</span> qpdf<span class="sc">::</span><span class="fu">pdf_split</span>(input)</span>
+<span id="cb34-21"><a href="qpdf.html#cb34-21" aria-hidden="true" tabindex="-1"></a>  stamps <span class="ot">&lt;-</span> qpdf<span class="sc">::</span><span class="fu">pdf_split</span>(stamp)</span>
+<span id="cb34-22"><a href="qpdf.html#cb34-22" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb34-23"><a href="qpdf.html#cb34-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(pages)){</span>
+<span id="cb34-24"><a href="qpdf.html#cb34-24" aria-hidden="true" tabindex="-1"></a>    out[[i]] <span class="ot">&lt;-</span> qpdf<span class="sc">::</span><span class="fu">pdf_overlay_stamp</span>(pages[i], stamps[i])</span>
+<span id="cb34-25"><a href="qpdf.html#cb34-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb34-26"><a href="qpdf.html#cb34-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pdf_combine</span>(<span class="fu">unlist</span>(out))</span>
+<span id="cb34-27"><a href="qpdf.html#cb34-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.remove</span>(pages)</span>
+<span id="cb34-28"><a href="qpdf.html#cb34-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.remove</span>(stamps)</span>
+<span id="cb34-29"><a href="qpdf.html#cb34-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.remove</span>(<span class="fu">unlist</span>(out))</span>
+<span id="cb34-30"><a href="qpdf.html#cb34-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="ggplot2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="xlsx.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="pdf2docx.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

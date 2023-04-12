@@ -3,7 +3,8 @@
 
 ## 関数一覧
 
-```{r eval = FALSE}
+
+```r
 library(qpdf)
 
   # PDFのページ数取得，show the number of pages in a pdf
@@ -28,8 +29,8 @@ pdf_rotate_pages(input, pages, angle = 90, relative = FALSE, output = NULL, pass
 pdf_overlay_stamp(input, stamp, output = NULL, password = "")
 ```
 
-```{r eval = FALSE}
 
+```r
 input <- ""
 pdf_split(input, output = "d:/", password = "")
 
