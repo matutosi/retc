@@ -9,6 +9,7 @@ rmd_files:
 - "install.Rmd"
 - "package.Rmd"
 - "fs.Rmd"
+- "stringr.Rmd"
 - "assoc.Rmd"
 - "ggplot2.Rmd"
 - "magrittr.Rmd"
