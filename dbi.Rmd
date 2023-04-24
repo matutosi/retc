@@ -42,11 +42,21 @@ dbListTables(con)
 
 
 ```{r}
-res <- dbSendQuery(con, "SELECT year, model, displ FROM mpg WHERE cyl = 4")
+  # SQLで選択・フィルタ
+res <- dbSendQuery(con, "SELECT year, model, displ, cyl FROM mpg WHERE cyl = 4")
 df <- dbFetch(res)
 dbClearResult(res)
-tibble::tibble(res)
-  # その後は，tidyverseの関数群で処理すると楽
+tibble::tibble(df)
+
+  # とりあえず全部取得してから，dplyrで選択・フィルタ
+res <- dbSendQuery(con, "SELECT * FROM mpg")
+df <- dbFetch(res)
+dbClearResult(res)
+df %>%
+  tibble::as_tibble() %>%
+  print() %>%
+  dplyr::select(year, model, displ, cyl) %>%
+  dplyr::filter(cyl == 4)
 ```
 
 その他の詳細は以下を参照．

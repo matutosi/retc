@@ -13,7 +13,7 @@
 install.packages("Microsoft365R")
   # パッケージの読み込み
 library(Microsoft365R)
- # 会社などで組織で契約している場合
+ # 会社など組織で契約している場合
 Microsoft365R::get_business_outlook()
  # 個人利用の場合
   # Microsoft365R::get_personal_outlook()
@@ -39,7 +39,9 @@ em <-
     to = "matutosi@gmail.com", 
     cc = "matutosi@konan-wu.ac.jp"
   )
-em$send()  # メール送信
+
+  # メール送信
+em$send()
 
   # outlookの下書きフォルダからメールを取り出す
 drafts <- outlook$get_drafts()$list_emails()

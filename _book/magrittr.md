@@ -12,18 +12,6 @@ tidyverseは，Rでのデータ解析には欠かせないものになってい�
 library(tidyverse)
 ```
 
-```
-## Warning: package 'tidyverse' was built under R version 4.2.3
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 4.2.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 4.2.3
-```
-
 これらのライブラリの多く(forcats，tibble，stringr，dplyr，tidyr，purrr)で，`%>%` (パイプ)を使うことができる．
 私は`%>%`がtidyverse独自のものだと勘違いをしていた．
 しかし，`%>%`はもとはライブラリmagrittrの関数であり，そこからインポートされている．
@@ -50,10 +38,6 @@ tidyverseの関数では，引数とするオブジェクトが統一されて�
 
 ```r
 library(magrittr)
-```
-
-```
-## Warning: package 'magrittr' was built under R version 4.2.3
 ```
 
 ```
