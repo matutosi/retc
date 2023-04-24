@@ -26,52 +26,5 @@ pdf_overlay_stamp(input, stamp, output = NULL, password = "")
 input <- ""
 pdf_split(input, output = "d:/", password = "")
 
-#' 
-#' 
-#' 
-#' 
-page_num <- function(input, start = 1, end = length(input)){
-  qpdf::pdf_length(input)
-  qpdf::pdf_length(stamp)
-}
-#' 
-
-validate_length <- function(len_input, len_stamp, start, end){
-  if(end       < start)    { error("end must be larger than start!") }
-  if(len_input < start)    { error("input pages must be larger than start!") }
-  if(len_input < end  )    { error("input pages must be larger than end!") }
-  if(len_input > len_stamp){ error("stamp pages must be equal to or bigger than input!") }
-}
-pdf_overlay_stamps_each <- function(input, stamp, start = 1, end = length(input)){
-start <- 1; end <- length(input)
-  len_input <- qpdf::pdf_length(input) 
-  len_stamp <- qpdf::pdf_length(stamp)
-  if(end < 0){ end <- len_input + end}
-  validate_length(len_input, len_stamp, start, end)
-
-  pages_inputs <- seq(to = len_input)
-  pages_pre    <- seq(to = start - 1)
-  pages_post   <- seq(from = end  + 1, to = len_input)
-  pages_body   <- pages_inputs[-c(pages_pre, pages_post)]
-
-
-  inputs <- qpdf::pdf_split(input)
-  stamps <- qpdf::pdf_split(stamp)
-  out <- list()
-  for(i in seq_along(inputs)){
-    out[[i]] <- qpdf::pdf_overlay_stamp(inputs[i], stamps[i])
-  }
-  qpdf::pdf_combine(unlist(out), "out.pdf")
-  file.remove(inputs)
-  file.remove(stamps)
-  file.remove(unlist(out))
-}
-
-library(qpdf)
-setwd("D:/matu/work/ToDo/2310vs_congress/program")
-input <- "input.pdf"
-stamp <- "stamp.pdf"
-
-pdf_overlay_stamps_each(input, stamp)
 
 ```
