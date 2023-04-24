@@ -23,20 +23,32 @@ SQLを使い慣れていれば，SQLで各種の操作をするのが良いだ�
 
 ## 準備
 
-```{r eval = FALSE}
-install.packages("DBI")
+```{r}
+install.packages(c("DBI", "RSQLite"))
 library(DBI)
+library(RSQLite)
+library(tidyverse)
 ```
+
+```{r}
+  # 一時的データの準備
+con <- dbConnect(RSQLite::SQLite(), dbname = ":memory:")
+dbWriteTable(con, "mpg", mpg)
+dbListTables(con)
+```
+
 
 ## 使い方
 
-詳細は以下を参照．
-
-https://cran.r-project.org/web/packages/DBI/vignettes/DBI-1.html
 
 ```{r}
-
-
+res <- dbSendQuery(con, "SELECT year, model, displ FROM mpg WHERE cyl = 4")
+df <- dbFetch(res)
+dbClearResult(res)
+tibble::tibble(res)
+  # その後は，tidyverseの関数群で処理すると楽
 ```
 
+その他の詳細は以下を参照．
 
+https://cran.r-project.org/web/packages/DBI/vignettes/DBI-1.html
