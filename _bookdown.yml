@@ -21,3 +21,4 @@ rmd_files:
 - "xlsx.Rmd"
 - "qpdf.Rmd"
 - "pdf2docx.Rmd"
+- "outlook.Rmd"
