@@ -23,8 +23,11 @@ SQLを使い慣れていれば，SQLで各種の操作をするのが良いだ�
 
 ## 準備
 
-```{r}
+```{r eval = FALSE}
 install.packages(c("DBI", "RSQLite"))
+```
+
+```{r}
 library(DBI)
 library(RSQLite)
 library(tidyverse)

@@ -25,8 +25,11 @@ stringrには，
 
 ## 準備
 
-```{r}
+```{r eval = FALSE}
 install.packages("stringr")
+```
+
+```{r}
 library(stringr)
 ```
 
