@@ -59,6 +59,14 @@ df %>%
   dplyr::filter(cyl == 4)
 ```
 
-その他の詳細は以下を参照．
+
+
+SQL使いの方は，「SQLではじめるデータ分析 ―クエリで行う前処理、時系列解析、コホート分析、テキスト分析、異常検知」を参考にしてSQLでデータ処理をするのも良いだろう．
+しかし，R使いにとってはdplyrやggplot2を使って処理するほうが楽だと思われる．
+dplyrやggplot2を使ったデータ分析には，「Rではじめるデータサイエンス」が参考になる．
+https://r4ds.hadley.nz/
+
+
+その他，DBIパッケージの詳細は以下を参照．
 
 https://cran.r-project.org/web/packages/DBI/vignettes/DBI-1.html
