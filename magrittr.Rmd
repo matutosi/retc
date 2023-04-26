@@ -81,18 +81,20 @@ library(magrittr)
 ほんの少しだけ，コードを短くできる．
 
 ```{r}
-mpg # 燃費データ
+head(mpg) # 燃費データ
 tmp <- mpg
 tmp <-
   tmp %>%
   dplyr::filter(year==1999) %>%
   tidyr::separate(trans, into=c("trans1", "trans2", NA)) %>%
+  head() %>%
   print()
 
 tmp <- mpg
 tmp %<>%
   dplyr::filter(year==1999) %>%
   tidyr::separate(trans, into=c("trans1", "trans2", NA)) %>%
+  head() %>%
   print()
 ```
 
@@ -108,10 +110,6 @@ tmp %<>%
 例えば，ちょっとだけ処理して，変数に保存するときに使う．
 imapと組み合わせて，保存する画像のファイル名を設定する時に使うと便利である．
 
-```{r}
-mpg # 燃費データ
-
-```
 
 `%T>%`は便利ではあるが，以下の点で注意が必要である．
 - 分岐途中の結果をオブジェクトに代入するときには，`<-`ではなく，`<<-`を使う
@@ -138,8 +136,8 @@ mpg # 燃費データ
 `%$%`は，`%>%`と`.$`の組み合わせのショートカットである．
 
 ```{r}
-mpg %>% .$manufacturer
-mpg %$%   manufacturer
+mpg %>% .$manufacturer %>% head()
+mpg %$%   manufacturer %>% head()
 ```
 
 パッケージ開発ではパイプを使った場合の`.`が推奨されていない．
@@ -149,7 +147,7 @@ automaterのようにGithubでパッケージを公開するならそれでも�
 そこで，DESCRIPTIONで次のように`%$%`や`%>%`をインポートしておくと，パッケージの中でこれらを使える．
 `%>%`だけなら，usethis::use_pipe()とすれば，開発パッケージのDESCRIPTIONに，importFrom(magrittr,"%>%")を書いてくれる．
 
-```{r}
+```{r eval = FALSE}
 importFrom(magrittr,"%>%")
 importFrom(magrittr,"%$%")
 ```

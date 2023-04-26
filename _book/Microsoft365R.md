@@ -1,4 +1,4 @@
-# パッケージ Microsoft365R
+# Microsoft365R {#Microsoft365R}
   #   https://cran.r-project.org/web/packages/Microsoft365R
   # Outlookの使い方
   #   https://cran.r-project.org/web/packages/Microsoft365R/vignettes/outlook.html
@@ -26,7 +26,8 @@
 ### インストールと初期設定
 
 この操作は，最初に1回だけ実行すればOK.
-```{r eval = FALSE}
+
+```r
   # インストール
 install.packages("Microsoft365R")
   # パッケージの読み込み
@@ -41,7 +42,8 @@ Microsoft365R::get_business_outlook()
 
 まずは，試しにメールを作って送ってみる．
 
-```{r eval = FALSE}
+
+```r
  # 会社などで組織で契約している場合
 outlook <- Microsoft365R::get_business_outlook()
  # 個人利用の場合
@@ -94,7 +96,8 @@ CCとBCCは任意．
 複数ファイルを添付するときは，カンマでpath(ファイル名)を区切る．
 絶対pathで指定すると間違いは少ない．
 
-```{r eval = FALSE}
+
+```r
   # 宛先や本文をエクセルで作成しておき
   #   一斉にメールを作成・送信する場合
 

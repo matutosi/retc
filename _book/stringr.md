@@ -1,4 +1,4 @@
-# stringrで文字列操作{#stringr}
+# stringrで文字列操作 {#stringr}
 
 ## はじめに
 
@@ -28,12 +28,6 @@ stringrには，
 install.packages("stringr")
 ```
 
-```
-## package 'stringr' successfully unpacked and MD5 sums checked
-## 
-## The downloaded binary packages are in
-## 	C:\Users\matu\AppData\Local\Temp\Rtmpa4WCHK\downloaded_packages
-```
 
 ```r
 library(stringr)

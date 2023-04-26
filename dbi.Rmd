@@ -1,4 +1,4 @@
-# DBIでデータ取得{#dbi}
+# DBIでデータ取得 {#dbi}
 
 ## データベースとの連携
 
@@ -49,7 +49,7 @@ dbListTables(con)
 res <- dbSendQuery(con, "SELECT year, model, displ, cyl FROM mpg WHERE cyl = 4")
 df <- dbFetch(res)
 dbClearResult(res)
-tibble::tibble(df)
+tibble::as_tibble(df)
 
   # とりあえず全部取得してから，dplyrで選択・フィルタ
 res <- dbSendQuery(con, "SELECT * FROM mpg")
@@ -59,7 +59,8 @@ df %>%
   tibble::as_tibble() %>%
   print() %>%
   dplyr::select(year, model, displ, cyl) %>%
-  dplyr::filter(cyl == 4)
+  dplyr::filter(cyl == 4) %>%
+  head()
 ```
 
 
