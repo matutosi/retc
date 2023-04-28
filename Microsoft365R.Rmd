@@ -123,11 +123,42 @@ WordやExcelの検索・置換の機能を用いれば，1つのファイル内�
 
 VBAのマクロと同様のことをRから実行してみる．
 さらに，日付のデータがある場合は，パッケージlubridateを利用して曜日の整合性をチェックする．
-日付を変更して曜日を変更し忘れた，あるいはその逆は多くの人がやってしまいがちなことだからだ．
+日付を変更して曜日を変更し忘れる，あるいは日付を変更し忘れることは多くの人がやってしまいがちだ．
 日付(月日)を固定したい場合であれば，曜日のみ変更すれば良いので分かりやすい．
 曜日を固定したい場合は「10月の第2日曜日」のように法則がきっちりとしていれば，プログラムは簡単である．
-それでも，10月1日の前後3日以内の火曜日のような決まりがあれば，
-もし，厳密な決め方がないときはプログラムとして書くことはできないが，いくつかの候補を示してそこからユーザが選ぶ方法を取ることができる．
+あるいは，10月1日の前後3日以内の火曜日のような法則でも可能である．
+とにかく，決め方が明確であり，それによって1つに日付を決めることができれば，プログラムによる自動化ができる．
 
+```{r, eval = FALSE}
+  # https://ardata-fr.github.io/officeverse/index.html
+  # https://github.com/omegahat/RDCOMClient
+
+  # install.packages("officer")
+library(officer)
+wd <- "D:/matu/work/tmp/"
+setwd(wd)
+path <- "2023卒業研究について.docx"
+doc <- officer::read_docx(path)
+doc <- officer::headers_replace_all_text(doc, old_value = "卒業", new_value = "そつぎょう", warn = FALSE)
+doc <- officer::footers_replace_all_text(doc, old_value = "卒業", new_value = "そつぎょう", warn = FALSE)
+doc <- officer::body_replace_all_text(doc, old_value = "卒業", new_value = "そつぎょう")
+print(doc, target = "2023.docx")
+
+  # getS3method("print", "rdocx")
+  # officer:::print.rdocx
+write_docx <- function(doc, path){
+  officer:::print.rdocx(doc, target = path)
+}
+
+officer::docx_summary(doc)
+install.packages("readtext")
+library(readtext)
+text <- readtext(path)$text
+stringr()
+
+
+
+
+```
 
 
