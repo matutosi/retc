@@ -13,6 +13,7 @@ rmd_files:
   # - "tidyverse.Rmd"
 - "magrittr.Rmd"
 - "stringr.Rmd"
+- "lubridate.Rmd"
   # - "dplyr.Rmd"
 - "ggplot2.Rmd"
 - "fs.Rmd"
@@ -24,4 +25,4 @@ rmd_files:
 - "xlsx.Rmd"
 - "qpdf.Rmd"
 - "pdf2docx.Rmd"
-- "Microsoft365R.Rmd"
+- "microsoft365r.Rmd"

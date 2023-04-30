@@ -1,6 +1,6 @@
 d:
 cd D:\matu\work\ToDo\retc\_book
-xcopy D:\matu\work\ToDo\retc\_book D:\matu\work\ToDo\blog\docs\retc /Y /E
+xcopy D:\matu\work\ToDo\retc\_book D:\matu\work\ToDo\blog\docs\retc /D /Y /E
 
 d:
 cd d:\matu\work\todo\blog
@@ -9,3 +9,4 @@ git commit -m "update"
 git pull
 git push
 pause
+start https://matutosi.github.io/retc/index.html
