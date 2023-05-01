@@ -1,5 +1,5 @@
 --- 
-title: "Rにる作業の自動化・効率化 -各種パッケージの活用方法-"
+title: "Rにる作業の自動化・効率化 -パッケージ活用術-"
 author: "Toshikazu Masumura"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site

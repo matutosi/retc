@@ -13,3 +13,4 @@ git pull
 git push
 pause
 start https://matutosi.github.io/retc/index.html
+start D:\matu\work\ToDo\retc\_book\_main.pdf
