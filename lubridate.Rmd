@@ -1,4 +1,4 @@
-# lubridateで日付・時刻を扱う
+# lubridateで日付・時刻を扱う {#lubridate}
 
 年月日や曜日を扱う場合，パッケージlubridateを利用するのが便利である．
 lubridateは，tidyverseに含まれているパッケージの1つで，日付や時刻・時間データを扱う際には必須と言っても過言ではない．
