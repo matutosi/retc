@@ -19,6 +19,7 @@ rmd_files:
 - "fs.Rmd"
 - "shell.Rmd"
 - "rvest.Rmd"
+  # - "rvest_amazon.Rmd"
 - "rselenium.Rmd"
 - "reticulate.Rmd"
 - "dbi.Rmd"

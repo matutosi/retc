@@ -1,0 +1,57 @@
+# rvestでスクレイピング(amazon) {#rvest_amazon}
+
+## Amazon Primeの新着情報の取得例
+
+
+```{r}
+Sys.setlocale("LC_TIME", "en_US.UTF-8") # アメリカ英語に設定
+  # date <- lubridate::today()
+date <- lubridate::ymd("2022-5-1")
+ym <- paste0("^", year(date), "年", month(date) , "月")
+
+main <- "https://www.aboutamazon.jp/news/entertainment/amazon-prime-video-new-content-"
+url_amz <- 
+  month(date, label = TRUE, abbr = FALSE) %>%
+  stringr::str_to_lower() %>%
+  paste0(main, ., "-", year(date))
+html <- rvest::read_html(url_amz)
+```
+
+
+```{r}
+polite::bow("https://www.aboutamazon.jp/")
+```
+
+```{r}
+contents <- 
+  html %>%
+  rvest::html_elements("body") %>%
+  rvest::html_elements("div.RichTextArticleBody-body li,p,h3.cms-headings-h3") %>%
+  rvest::html_text() %>%
+  tibble::as_tibble() %>%
+  dplyr::filter(value != "")
+
+contents %>%
+  dplyr::mutate(
+    div = dplyr::case_when(
+      stringr::str_detect(value, "^洋画|邦画|アニメ|海外|国内|韓国") & stringr::str_length(value) < 20 ~ value,
+      TRUE ~ NA    )) %>%
+  dplyr::mutate(
+    date = dplyr::case_when(
+      stringr::str_detect(value, ym) ~ value,
+      TRUE ~ NA    )) %>%
+  tidyr::fill(all_of(c("div", "date")), .direction = "down") %>%
+  dplyr::mutate(value = stringr::str_replace(value, "^Amazon Original", "")) %>%
+  dplyr::mutate(value = stringr::str_replace_all(value, " ", "")) %>%
+  dplyr::mutate(value = stringr::str_replace(value, "※.+", "")) %>%
+  dplyr::filter(stringr::str_detect(value, "^『")) %>%
+  print(n=100)
+
+
+  #   html_elements("h3.cms-headings-h3") %>%
+
+  # id         rvest::html_elements("#content") %>%
+  # class      rvest::html_elements(".next") %>%
+  # tag        rvest::html_elements("a") %>%
+  # 属性       rvest::html_attr("href")
+```

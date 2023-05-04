@@ -102,10 +102,10 @@ http://jpnrdb.com/search.php?mode=spec
 上記URLで例として示されているニッコウキスゲをキーワード(種名)として入力すると，ページ遷移する．
 アドレスバーにはカタカナがそのまま表示されている．
 しかし，アドレスをコピーしてテキストエディタに貼り付けると文字化けしたようになる．
-
+<!--
 http://jpnrdb.com/search.php?mode=key&q=ニッコウキスゲ   
 http://jpnrdb.com/search.php?mode=key&q=%E3%83%8B%E3%83%83%E3%82%B3%E3%82%A6%E3%82%AD%E3%82%B9%E3%82%B2
-
+-->
 これはURLエンコードによってコード変換された結果であるが安心して欲しい．
 rvestを使ってHTMLを取得するときには，日本語をそのまま使用することができる．
 上記のURLのうち「http://jpnrdb.com/search.php?mode=」まではここで使用するページに共通する部分であるため，mainとしておく．
@@ -297,64 +297,9 @@ read_html()でHTMLが取得できない場合は，URLが正しいか確認す�
 polite::bow("http://jpnrdb.com/")
 ```
 
-「Crawl delay: 5 sec」とあるため，5秒間隔を求めていることが分かる．
+「Crawl delay: 5 sec」とあるため，5秒間隔でスクレイピング可能であると思われる．
 これ未満の間隔でデータを頻繁に求めると，「攻撃」と見なされて接続できな状態になる可能性がある．
-さらに，悪質なときには法的手段を取られることもありえるので，注意が必要である．
+さらに悪質なときには法的手段を取られることもありえるので，注意が必要である．
+ただし，http://jpnrdb.com/にrobots.txtは設置されておらず，これらはpoliteパッケージが一般的な注意として示しているに過ぎない．
+大量にデータを入手する必要がある場合は，あらかじめ管理者に連絡する方が無難である．
 
-
-## Amazon Primeの新着情報の取得例
-
-
-
-```{r}
-Sys.setlocale("LC_TIME", "en_US.UTF-8") # アメリカ英語に設定
-  # date <- lubridate::today()
-date <- lubridate::ymd("2022-5-1")
-ym <- paste0("^", year(date), "年", month(date) , "月")
-
-main <- "https://www.aboutamazon.jp/news/entertainment/amazon-prime-video-new-content-"
-url_amz <- 
-  month(date, label = TRUE, abbr = FALSE) %>%
-  stringr::str_to_lower() %>%
-  paste0(main, ., "-", year(date))
-html <- rvest::read_html(url_amz)
-```
-
-
-```{r}
-polite::bow("https://www.aboutamazon.jp/")
-```
-
-```{r}
-contents <- 
-  html %>%
-  rvest::html_elements("body") %>%
-  rvest::html_elements("div.RichTextArticleBody-body li,p,h3.cms-headings-h3") %>%
-  rvest::html_text() %>%
-  tibble::as_tibble() %>%
-  dplyr::filter(value != "")
-
-contents %>%
-  dplyr::mutate(
-    div = dplyr::case_when(
-      stringr::str_detect(value, "^洋画|邦画|アニメ|海外|国内|韓国") & stringr::str_length(value) < 20 ~ value,
-      TRUE ~ NA    )) %>%
-  dplyr::mutate(
-    date = dplyr::case_when(
-      stringr::str_detect(value, ym) ~ value,
-      TRUE ~ NA    )) %>%
-  tidyr::fill(all_of(c("div", "date")), .direction = "down") %>%
-  dplyr::mutate(value = stringr::str_replace(value, "^Amazon Original", "")) %>%
-  dplyr::mutate(value = stringr::str_replace_all(value, " ", "")) %>%
-  dplyr::mutate(value = stringr::str_replace(value, "※.+", "")) %>%
-  dplyr::filter(stringr::str_detect(value, "^『")) %>%
-  print(n=100)
-
-
-  #   html_elements("h3.cms-headings-h3") %>%
-
-  # id         rvest::html_elements("#content") %>%
-  # class      rvest::html_elements(".next") %>%
-  # tag        rvest::html_elements("a") %>%
-  # 属性       rvest::html_attr("href")
-```
