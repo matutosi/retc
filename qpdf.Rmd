@@ -125,6 +125,7 @@ for(file in files){
   }
   file.rename(output, numbered)
 }
+```
 
 ## PDFの結合
 
@@ -136,12 +137,50 @@ for(file in files){
 pdf_combine(input, output = NULL, password = "")
 ```
 
-ここではあるディレクトリにあるPDFファイルを1つのPDFファイルとして結合することを自動化するスクリプトを作成する．
-
+特定のディレクトリ内のPDFファイルを1つのPDFファイルとして結合することを自動化するスクリプトは以下のとおりである．
 
 ```{r}
 system.file("rsc/combine_qpdf.rsc", package = "automater")
+  readLines() %>%
+  paste0(collapse = "\n") %>%
+  cat()
 ```
+
+- combine_qpdf.rsc をディレクトリに保存
+  - 以下のコードで、combine_qpdf.rsc をコピー可能
+```{r, eval = FALSE}
+file <- "combine_qpdf"
+path <- "c:/" # set your path
+automater::set_rsc(file, path)
+```
+- 拡張子 .rsc を Rscript.exe に関連付ける   
+- 結合したいPDFファイルを combine_qpdf.rsc と同じディレクトリにコピーする   
+  ファイルの結合順はファイル名の順序と同じ
+- combine_qpdf.rsc をクリックする   
+- 黒いウィンドウが開くので，しばらく待つ   
+  初めて実行するときは，パッケージのインストールに時間がかかることがある．   
+- 結合したファイル名は以下のとおりである．   
+  出力: 「combined_"2020-11-27_12_00_00.pdf"」(結合した日付・時刻)   
+
+
+PDFファイルの結合順はファイル名の順序と同じなので，`fs::dir_ls()`でファイル名一覧を取得し，`file_move()`で名前を変更する必要がある．
+さらに，このあたりも自動化するには，
+
+```{r, eval = FALSE}
+wd <- "D:/matu/work/ToDo/automater/inst/pdf"
+setwd(wd)
+files <- fs::dir_ls(regexp = "\\.pdf")
+files %>%
+  paste0(seq(.), ": ", .) %>%
+  paste0(collapse = "\n") %>%
+  paste0("\n  結合するファイルを番号で指定してください(カンマ区切り)．\n    例：3,1,2\n") %>%
+  cat()
+order <- readLines(stdin(), n=1)
+
+```
+
+
+## PDFの圧縮・最適化
 
 
 pdf_compress()は圧縮とともに，最適化(Linealize)してくれる．
