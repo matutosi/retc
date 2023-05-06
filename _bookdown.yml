@@ -21,6 +21,7 @@ rmd_files:
 - "rvest.Rmd"
   # - "rvest_amazon.Rmd"
 - "rselenium.Rmd"
+- "magick.Rmd"
 - "reticulate.Rmd"
 - "dbi.Rmd"
 - "xlsx.Rmd"
