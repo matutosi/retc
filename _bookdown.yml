@@ -6,25 +6,28 @@ language:
 
 rmd_files:
 - "index.Rmd"
-- "r.Rmd"
-- "install.Rmd"
-- "package.Rmd"
-- "assoc.Rmd"
-  # - "tidyverse.Rmd"
-- "magrittr.Rmd"
-- "stringr.Rmd"
-- "lubridate.Rmd"
-  # - "dplyr.Rmd"
-- "ggplot2.Rmd"
-- "fs.Rmd"
-- "shell.Rmd"
-- "rvest.Rmd"
-  # - "rvest_amazon.Rmd"
-- "rselenium.Rmd"
-- "magick.Rmd"
-- "reticulate.Rmd"
-- "dbi.Rmd"
-- "xlsx.Rmd"
-- "qpdf.Rmd"
-- "pdf2docx.Rmd"
-- "microsoft365r.Rmd"
+
+- "r.Rmd"                     # 
+- "install.Rmd"               # 
+- "package.Rmd"               # 
+- "assoc.Rmd"                 # 
+  # - "tidyverse.Rmd"         # 
+- "magrittr.Rmd"              # 
+- "stringr.Rmd"               # 
+- "lubridate.Rmd"             # 
+  # - "dplyr.Rmd"             # 
+- "ggplot2.Rmd"               # 
+- "fs.Rmd"                    # 
+- "shell.Rmd"                 # 
+- "rvest.Rmd"                 # 
+  # - "rvest_amazon.Rmd"      # 
+- "rselenium.Rmd"             # 
+- "magick.Rmd"                # 
+- "reticulate.Rmd"            # 
+- "dbi.Rmd"                   # 
+- "xlsx.Rmd"                  # 
+- "qpdf.Rmd"                  # 
+- "pdf2docx.Rmd"              # 
+- "microsoft365r.Rmd"         # 
+
+- authors_note.Rmd
