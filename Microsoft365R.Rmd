@@ -40,7 +40,7 @@ install.packages("Microsoft365R")
 ```
 
 
-```{r, message = FALSE}
+```{r, eval = FALSE, message = FALSE}
 library(tidyverse)
 library(Microsoft365R)
  # 会社など組織で契約している場合
@@ -234,9 +234,6 @@ x <- "21年1月1日(月)，2021年1月1日(月)，2021年10月10日(月)，2月2
 regrep <- "((20)*[2-5]\\d+[年/_-]*)*\\d\\d*[月/_-]*\\d\\d*[日]*(\\([月火水木金土日]\\))*"
 
 stringr::str_extract_all(x, regrep)
-
-
-
 
 ```
 

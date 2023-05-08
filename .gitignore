@@ -6,7 +6,9 @@ cp_retc.bat
 *.png
 *.pdf
 *.rds
-_book/
 img/
-_bookdown_files/
 libs/
+_bookdown_files/
+_book/
+!/**/*.md
+_main.rds
