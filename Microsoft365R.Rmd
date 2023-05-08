@@ -37,6 +37,11 @@
   # インストール
 install.packages("Microsoft365R")
   # パッケージの読み込み
+```
+
+
+```{r, message = FALSE}
+library(tidyverse)
 library(Microsoft365R)
  # 会社など組織で契約している場合
 Microsoft365R::get_business_outlook()

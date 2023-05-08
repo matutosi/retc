@@ -28,10 +28,10 @@ qpdfパッケージでは，PDFファイルのページ分割・抽出・結合�
 PDFtkはコマンドラインでの操作も可能であるため，大量の操作をするには適している．
 とはいえ，Rやそのパッケージで操作が自動化できればさらに便利である．
 
-なお，PDF関連の他のパッケージとしてはRpopplerやpdftoolsがある．
-Rpopplerではテキストの抽出ができる．
-pdftoolsではテキストの抽出，OCR(画像の文字認識，内部でtesseractパッケージを使用)，PDFファイルの分割・結合(内部でqpdfパッケージを使用)，画像ファイルへの変換などができる．
+なお，PDF関連の他のパッケージとしてはpdftoolsがある．
+pdftoolsではテキスト抽出，OCR(画像の文字認識，内部でtesseractパッケージを使用)，PDFファイルの分割・結合(内部でqpdfパッケージの関数を使用)，画像ファイルへの変換などができる．
 また，Microsoft365Rを使えばPDFをワードに変換できる．
+[Microsoft365R](#microsoft365r)
 
 余談であるが，Rのパッケージはそれぞれ独自コードを持つ部分がある一方で，他のパッケージの関数をインポートしているものや，ラッパー関数を用意しているものなどがある．
 例えば，automaterではそれ自体で有用な機能を持っているというよりは，他のパッケージを利用しやすくするためのラッパー関数の集合である．
@@ -218,7 +218,7 @@ automater::message_to_continue()
 
 ## PDFの圧縮・最適化
 
-pdf_compress()は圧縮とともに，最適化(Linealize)してくれる．
+pdf_compress()は圧縮や最適化(Linealize)をしてくれる．
 最適化されていないPDFはファイルを全部読み込まないと表示できないのに対して，
 最適化されたPDFは最後まで読み込みが完了しなくてもページ表示できる．
 ネット上にある重いPDFを表示させる場合に特に役立つ．
@@ -227,11 +227,11 @@ pdf_compress()は圧縮とともに，最適化(Linealize)してくれる．
 
 ```{r eval = FALSE}
   # 圧縮，compress or linearize a pdf file
+  # 最適化する場合は，linearize = TRUE
 pdf_compress(input, output = NULL, linearize = FALSE, password = "")
 ```
 
 ## PDFへのページ番号付加
-
 
 `pdf_overlay_stamp()`を使うと，PDFファイルに別のPDFファイルを重ね合わせることができる．
 
@@ -379,3 +379,51 @@ pdf_overlay_session_num <- function(input, start = 1, end = NULL, session = "a")
   pdf_overlay_stamps_each(input, stamp, start, end)
 }
 ```
+
+## pdftoolsでテキストの取り出し {#pdftools}
+
+pdftoolsパッケージでは，テキスト抽出，OCR(画像の文字認識)，PDFファイルの分割・結合，画像ファイルへの変換などができる．
+このうち，OCRではtesseractパッケージを，PDFの分割・結合ではqpdfパッケージの関数を使っており，直接それぞれのパッケージを使うのと基本的には同じ，画像ファイルへの変換はmagickパッケージで可能である．
+そのため，ここでは他のパッケージでは実装していないテキスト抽出を説明する．
+なお，テキスト抽出にはpopplerを使っている．
+Windows版のpdftoolsパッケージではpopplerが含まれているのでパッケージのインストールだけで使用可能である．
+MacやLinuxでは，popplerを別途インストールしなければならない．
+popplerのインストール方法は以下を参考にして欲しい．
+
+https://docs.ropensci.org/pdftools/
+
+
+まずは，パッケージのインストールと呼び出しを実行する．
+
+```{r, eval = FALSE}
+install.packages("pdftools")
+```
+
+```{r message = FALSE}
+library(pdftools)
+```
+
+関数`pdf_text()`にPDFファイルのパスを指定すれば，テキストを抽出した結果が得られる．
+1ページごとの内容が文字列のベクトルになっている．
+
+```{r}
+  # https://docs.ropensci.org/pdftools/
+url <- "http://arxiv.org/pdf/1403.2805.pdf"
+destfile <- "1403.2805.pdf"
+curl::curl_download(url, destfile)
+txt <- pdftools::pdf_text(destfile)
+tibble::as_tibble(txt)
+```
+
+文字列内の`\n`は改行を示しているが，そのままでは読みにくい．
+`\n`で改行して画面で表示するには`cat()`を使う．
+
+```{r, eval = FALSE}
+cat(txt[1])  # [1]で1ページ目
+```
+
+<!--
+  # install.packages("Rpoppler")
+  # library(Rpoppler)
+  # ?Rpoppler::PDF_text()
+-->

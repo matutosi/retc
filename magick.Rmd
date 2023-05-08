@@ -28,8 +28,8 @@ setwd(wd)
 ```
 
 ```{r, message = FALSE}
-library(magick)
 library(tidyverse)
+library(magick)
 library(webshot)
 ```
 
