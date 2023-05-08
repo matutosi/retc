@@ -3,3 +3,10 @@
 .RData
 .Ruserdata
 cp_retc.bat
+*.png
+*.pdf
+*.rds
+_book/
+img/
+_bookdown_files/
+libs/

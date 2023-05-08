@@ -11,13 +11,13 @@ rmd_files:
 - "install.Rmd"               # 
 - "package.Rmd"               # 
 - "assoc.Rmd"                 # 
+- "fs.Rmd"                    # 
   # - "tidyverse.Rmd"         # 
 - "magrittr.Rmd"              # 
+  # - "dplyr.Rmd"                 # 
 - "stringr.Rmd"               # 
 - "lubridate.Rmd"             # 
-  # - "dplyr.Rmd"             # 
 - "ggplot2.Rmd"               # 
-- "fs.Rmd"                    # 
 - "shell.Rmd"                 # 
 - "rvest.Rmd"                 # 
   # - "rvest_amazon.Rmd"      # 
@@ -30,4 +30,4 @@ rmd_files:
 - "pdf2docx.Rmd"              # 
 - "microsoft365r.Rmd"         # 
 
-- authors_note.Rmd
+  # - authors_note.Rmd
