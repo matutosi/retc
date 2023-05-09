@@ -1,0 +1,31 @@
+# dplyrでデータフレーム操作 {#dplyr}
+
+<!--
+tidyverseはまとめる?
+-->
+
+## はじめに
+
+irisを例にするが，できれば，veganとかdaveのデータを使う
+tidy dataへの変換が必要
+コードのみか，詳しくは松村や比嘉の解説を参考に
+
+gather()とspread()はpivot_longer()とpivot_wider()になって使いやすくなった．
+Hadley自身も使い方を混乱していたらしい
+
+
+
+## 準備
+
+
+```{r eval = FALSE}
+install.packages("tidyverse")
+```
+
+```{r, message = FALSE}
+library(tidyverse)
+```
+
+
+
+
