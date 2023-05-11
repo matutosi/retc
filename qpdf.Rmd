@@ -46,7 +46,11 @@ pdf_split()関数にinput引数として分割するファイルを，output引�
 ```{r eval = FALSE}
   # wd <- "set_your_directory"
   # setwd(wd)
-review <- curl::curl_download("https://www.jstage.jst.go.jp/article/vegsci/31/2/31_193/_pdf/-char/ja", fs::file_temp())
+review <- 
+  curl::curl_download(
+    "https://www.jstage.jst.go.jp/article/vegsci/31/2/31_193/_pdf/-char/ja", 
+    fs::file_temp(ext = "pdf")
+    )
 split_pdf <- qpdf::pdf_split(review)
 head(split_pdf)
 ```
@@ -254,7 +258,7 @@ pdf_overlay_stamp(input, stamp, output = NULL, password = "")
 ```{r, echo = FALSE, comment = ""}
   # https://teramonagi.hatenablog.com/entry/20130615/1371303616
 "https://raw.githubusercontent.com/matutosi/automater/main/R/overlay_qpdf.R" %>%
-  curl::curl_download(fs::file_temp()) %>%
+  curl::curl_download(fs::file_temp(ext = "R")) %>%
   readLines() %>%
   paste0(collapse = "\n") %>%
   cat()
