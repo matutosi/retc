@@ -12,3 +12,4 @@ _bookdown_files/
 _book/
 !/**/*.md
 _main.rds
+pkgs.txt
