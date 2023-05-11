@@ -22,11 +22,51 @@ library(tidyverse)
 library(reticulate)
 ```
 
+### PythonとPyAutoGUIのインストール
+
+[Pythonとそのライブラリのインストール](#install_python)を参照して，PythonとPyAutoGUIをインストールしておく．
 
 
-### Pythonのインストール
+### 使用するPythonの指定
 
-PyAutoGuiのインストール
+バージョンや形態の異なるPythonを複数インストールすることが可能である．
+[Pythonとそのライブラリのインストール](#install_python)で説明したようなPythonパッケージのインストーラを用いたものもあれば，Microsoft Store版のPythonもある．
+さらに，Anaconda，Conda，Minicondaなどをインストールしてその中でPythonを使うこともできる．
+そのため，reticulateで使用するPythonを指定する．
+なお，AnacondaなどのPythonを使う場合は，別途インストールして，`use_condaenv()`で指定する．
+
+```{r}
+find_python <- function(){
+  os <- get_os()
+  python_path <- 
+    ifelse(os == "win", "where python", "which python") %>%
+    system(intern = TRUE) %>%
+    fs::path()
+  return(python_path)
+}
+
+path <- find_python()
+reticulate::use_python(path)
+```
+
+## 
+
+```{r}
+system("pip list", intern = TRUE) %>%
+  tibble::as_tibble()
+
+system("pip install numpy", intern = TRUE)
+system("pip install matplotlib", intern = TRUE)
+```
+
+```{r}
+np <- reticulate::import("numpy") # import numpy as npと同じ
+plt <- reticulate::import("matplotlib.pyplot")
+```
+
+
+
+## PyAutoGUIで画像認識した場所にマウスポインターを動かしてクリックする
 
 <!--
 PyAutoGUIで画像認識した場所にマウスポインターを動かしてクリックする
@@ -34,23 +74,6 @@ https://take-tech-engineer.com/pyautogui-image/
 pyautogui.click('button.png') # Find where button.png appears on the screen and click it.
 -->
 
-
-## Pythonでのモジュール(パッケージ)のインストール
-
-Rstudioでpythonを書く (reticulate)
-https://qiita.com/Wa__a/items/42129e529cfb6c38e046
-
-py_install()やconda_install()でパッケージがインストールできないとき
-- pip でパッケージをインストール   
-- pipでインストールできたpythonをreticulate::use_python()で指定
-
-
-準備
-- Pythonのインストール   
-```
-```
-
-## 実行
 
 
 
@@ -67,8 +90,18 @@ py$variable
 ```
 
 <!--
+  ## Pythonでのモジュール(パッケージ)のインストール
+
+Rstudioでpythonを書く (reticulate)
+https://qiita.com/Wa__a/items/42129e529cfb6c38e046
+
+py_install()やconda_install()でパッケージがインストールできないとき
+- pip でパッケージをインストール   
+- pipでインストールできたpythonをreticulate::use_python()で指定
+-->
 
 
+<!--
 ```
 ## memo
   # pdf2docxのインストール   
