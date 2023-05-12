@@ -91,6 +91,10 @@ shell.exec(py_installer)
 system("python -V", intern = TRUE)
 ```
 
+Pythonのインストールがうまくいかない場合は，以下を参考にして欲しい．
+
+https://www.python.jp/install/windows/install.html
+
 ### PyAutoGUIのインストール
 
 <!--
