@@ -1,4 +1,4 @@
-# pdfをdocxに変換 {#pdf2docx}
+# RDCOMClientでpdfをdocxに変換 {#RDCOMClient}
 
 ```{r, message = FALSE}
 library(tidyverse)
