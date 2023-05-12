@@ -1,4 +1,4 @@
-# reticulate
+# reticulateでPythonを使う {#reticulate}
 
 RとPythonのパッケージは，相互に移植されていることが多い．
 例えば，Pythonのlogging(とRのfutile.logger)をもとにRのパッケージloggerは開発されている．
@@ -20,6 +20,7 @@ install.packages("reticulate")
 ```{r, message = FALSE}
 library(tidyverse)
 library(reticulate)
+library(automater)
 ```
 
 ### PythonとPyAutoGUIのインストール
@@ -30,26 +31,37 @@ library(reticulate)
 ### 使用するPythonの指定
 
 バージョンや形態の異なるPythonを複数インストールすることが可能である．
-[Pythonとそのライブラリのインストール](#install_python)で説明したようなPythonパッケージのインストーラを用いたものもあれば，Microsoft Store版のPythonもある．
-さらに，Anaconda，Conda，Minicondaなどをインストールしてその中でPythonを使うこともできる．
-そのため，reticulateで使用するPythonを指定する．
+[Pythonとそのライブラリのインストール](#install_python)で説明したようなPythonパッケージのインストーラを用いたもの(パッケージ版Python)もあれば，Microsoft Store版のPythonもある．
+さらに，Anacondaをインストールしてその中でPythonを使うこともできる．
+色々とあってややこしいが，この文章ではパッケージ版Pythonを使うことにする．
+reticulateで使用するPythonとしてインストールしたパッケージ版Pythonを指定する．
 なお，AnacondaなどのPythonを使う場合は，別途インストールして，`use_condaenv()`で指定する．
 
-```{r}
+```{r, eval = FALSE}
 find_python <- function(){
-  os <- get_os()
+  os <- automater::get_os()
   python_path <- 
     ifelse(os == "win", "where python", "which python") %>%
     system(intern = TRUE) %>%
-    fs::path()
+    fs::path() %>%
+    `[`(., stringr::str_detect(., "Python311"))
   return(python_path)
 }
 
 path <- find_python()
+path
 reticulate::use_python(path)
 ```
 
-## 
+`path`に複数の文字列が入っているときは，複数のPythonがインストールされている．
+そのときは，`path[1]`のように指定しなければならない．
+また，Windowsで以下のようなpathがある場合は，アプリ実行エイリアスの設定を変更すると良い．
+
+C:/Users/your_user_name/AppData/Local/Microsoft/WindowsApps/python.exe
+
+参考：https://hrkworks.com/it/programming/python/py-4421/
+
+## Pythonを使ってみる
 
 ```{r}
 system("pip list", intern = TRUE) %>%
@@ -61,12 +73,64 @@ system("pip install matplotlib", intern = TRUE)
 
 ```{r}
 np <- reticulate::import("numpy") # import numpy as npと同じ
-plt <- reticulate::import("matplotlib.pyplot")
+x <- np$random$rand(as.integer(100))
+y <- np$random$rand(as.integer(100))
+tibble::tibble(x, y) %>%
+  ggplot2::ggplot(aes(x, y)) +
+    ggplot2::geom_point()
 ```
 
+Pythonで，`np.random.rand`と表記するものをRで使うには，`np$random$rand`とする．
+Rのオブジェクトに代入してしまえば，あとは慣れたもので簡単に散布図が作成できる．
 
 
 ## PyAutoGUIで画像認識した場所にマウスポインターを動かしてクリックする
+
+
+```{r}
+pag <- reticulate::import("pyautogui")  # 呼び出し時は小文字で
+```
+
+Pythonに慣れていない筆者は何度かコケてしまったのが，Pythonでライブラリが大文字を含んでいても，呼び出すときは小文字で指定するようだ．
+
+```{r, eval = FALSE}
+pag$moveTo(10, 10)
+pag$moveTo(100, 100, duration=3)
+
+img <- "d:/button.png"
+system.time(position <- pag$locateOnScreen(img))
+get_center <- function(position){
+  x <- position$left + (position$width / 2)
+  y <- position$top +  (position$height / 2)
+  return(list(x = x, y = y))
+}
+get_center(position)
+pag$moveTo(get_center(position)$x, get_center(position)$y)
+```
+
+```{r, eval = FALSE}
+target_range <- (500, 500, 100, 100)
+pag$locateOnScreen(img)
+  # region = target_range
+  # grayscale = True
+  # confidence = 0.6
+```
+
+```{r}
+system("pip install art", intern = TRUE)
+```
+
+```{r}
+art <- reticulate::import("art")
+art$tprint("Hellow world!")
+art$tprint("HAPPY", font = "block", chr_ignore = TRUE)
+```
+
+
+```{r, eval = FALSE}
+reticulate::source_python("test.py")
+```
+
 
 <!--
 PyAutoGUIで画像認識した場所にマウスポインターを動かしてクリックする
@@ -81,7 +145,7 @@ pyautogui.click('button.png') # Find where button.png appears on the screen and 
 
 variableは変数名
 
-```
+```{r, eval = FALSE}
   # RからPythonへ(Pythonで取り出し)
 r.variable
 
@@ -89,9 +153,13 @@ r.variable
 py$variable
 ```
 
+Pythonでのモジュールとはファイル(`*.py`)のことで，モジュールをまとめたものがパッケージ，パッケージをまとめたものがライブラリである．
+このライブラリを`pip install`でインストール，`import()`でインポートしている．
+つまり，Rでのパッケージにあたるのが，Pythonでのライブラリである．
+
+
 <!--
   ## Pythonでのモジュール(パッケージ)のインストール
-
 Rstudioでpythonを書く (reticulate)
 https://qiita.com/Wa__a/items/42129e529cfb6c38e046
 
