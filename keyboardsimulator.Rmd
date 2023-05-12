@@ -84,13 +84,19 @@ position
 
 
 ```{r, eval = FALSE}
-KeyboardSimulator::mouse_move_click( 770,1900)
-KeyboardSimulator::mouse_move_click( 730,1800)
-KeyboardSimulator::mouse_move_click( 700,1760)
-KeyboardSimulator::mouse_move_click(1040,1750)
+
+mouse.move(630, 650) # DP: リモートデスクトップへの接続
+
+
   # purrr::map2(mouse_move_click)
+
+  # USB取り出し
+pos <- KeyboardSimulator::mouse.get_cursor()
 automater::mouse_move_click( 770,1900)
 automater::mouse_move_click( 730,1800)
 automater::mouse_move_click( 700,1760)
 automater::mouse_move_click(1040,1750)
+automater::mouse_move_click(pos[1], pos[2])
+
+
 ```
