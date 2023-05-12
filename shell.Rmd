@@ -98,7 +98,7 @@ https://www.python.jp/install/windows/install.html
 ### PyAutoGUIのインストール
 
 <!--
-```{r, echo = FALSE}
+```{r, eval = FALSE, echo = FALSE}
 cmd <- "pip uninstall PyAutoGUI"
 res <- system(cmd, input = "Y")
 ```
