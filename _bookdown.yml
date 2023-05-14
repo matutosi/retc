@@ -11,15 +11,15 @@ rmd_files:
 - "install.Rmd"               # 
 - "package.Rmd"               # 
 - "assoc.Rmd"                 # 
+- "magrittr.Rmd"              # 
+  # - "tidyverse.Rmd"         # 
+  # - "dplyr.Rmd"                 # 
+- "stringr.Rmd"               # 
+- "lubridate.Rmd"             # 
 - "fs.Rmd"                    # 
 - "shell.Rmd"                 # 
 - "reticulate.Rmd"            # 
 - "keyboardsimulator.Rmd"     # 
-  # - "tidyverse.Rmd"         # 
-- "magrittr.Rmd"              # 
-  # - "dplyr.Rmd"                 # 
-- "stringr.Rmd"               # 
-- "lubridate.Rmd"             # 
 - "ggplot2.Rmd"               # 
 - "rvest.Rmd"                 # 
   # - "rvest_amazon.Rmd"      # 
