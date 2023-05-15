@@ -167,7 +167,7 @@ Pythonに慣れていない筆者は何度かコケてしまったのが，Pytho
 pag$moveTo(10, 10)
 pag$moveTo(100, 100, duration=3)
 
-img <- path <- "D:/matu/work/ToDo/automater/inst/img/up_arrow.png"
+img <- "D:/matu/work/ToDo/automater/inst/img/up_arrow.png"
 position <- pag$locateOnScreen(img)
 get_center <- function(position){
   x <- position$left + (position$width / 2)
@@ -179,6 +179,14 @@ pag$moveTo(get_center(position)$x, get_center(position)$y)
 ```
 
 ```{r window_size, eval = FALSE}
+  # C:\Users\matu>java -version
+  # java version "1.8.0_361"
+  # Java(TM) SE Runtime Environment (build 1.8.0_361-b09)
+  # Java HotSpot(TM) 64-Bit Server VM (build 25.361-b09, mixed mode)
+  # C:\Users\matu>path
+  # PATH=C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Java\jre1.8.0_361\bin\client
+  # ユーザの環境変数
+  #   C:\Program Files (x86)\Java\jre1.8.0_361\bin\client
 library(rJava)
 .jinit()
 toolkit <- J("java.awt.Toolkit")
@@ -197,7 +205,7 @@ recog_image_click <- function(img, pag, ...){
   automater::mouse_move_click(position$x, position$y)
 }
 w <- 600
-h <- 200
+h <- 300
 region <- c(width - w, height - h, w, h)
 path <- "D:/matu/work/ToDo/automater/inst/img"
 img <- fs::dir_ls(path, regexp = "png") 
@@ -205,7 +213,7 @@ pos <- KeyboardSimulator::mouse.get_cursor()
 recog_image_click(img[3], pag, region = region)
 recog_image_click(img[2], pag, region = region)
 recog_image_click(img[1], pag, region = region)
-mouse_move_click(pos[1], pos[2])
+automater::mouse_move_click(pos[1], pos[2])
 
   # region = region
   # grayscale = True
@@ -220,3 +228,15 @@ pyautogui.click('button.png') # Find where button.png appears on the screen and 
 -->
 
 
+  #   https://stackoverflow.com/questions/7305244/how-can-i-get-the-screen-resolution-in-r
+  suppressWarnings(
+    current_resolution <- system("wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution /format:value", intern = TRUE)  %>%
+      strsplit("=") %>%
+      unlist() %>%
+      as.double()
+  )
+  current_resolution <- current_resolution[!is.na(current_resolution)]
+  current_resolution / 1.25
+
+KeyboardSimulator::mouse.move(999999,999999)
+KeyboardSimulator::mouse.get_cursor()
