@@ -1,7 +1,6 @@
 # stringrで文字列操作 {#stringr}
 
 <!--
-tidyverseは1つのパッケージではなく，複数のパッケージからなるパッケージ群である．
 -->
 
 ## はじめに
@@ -13,6 +12,13 @@ stringiは文字列操作の関数群で，文字コードの変換なども含�
 
 stringrには，
 
+少なくとも自分の経験では，stringrだけで操作が完結することはほとんどない．
+逆に，パッケージ開発をしていてstringr(やdplyr)を使わずに一日が終わることもあまりない．
+つまり，stringrはかなり便利で必要不可欠なツールである．
+もちろん，baseパッケージの同様の関数を使っても機能上は問題ないことが多い．
+でも，引数の指定方法に一貫性があると，コードを綺麗に書くことができる．
+綺麗なコードは，汚いコードよりも書きやすいし，見た目も良いし，何よりもバグが入りにくい(入らないわけではない)．
+
 ## 準備
 
 
@@ -22,32 +28,72 @@ install.packages("stringr")
 
 ```{r, message = FALSE}
 library(tidyverse)
-library(stringr)
+library(stringr)  # 本来は不要
+library(fs)
 ```
 
 
+<!--
 ## stringrとbase
+https://heavywatal.github.io/rstats/stringr.html
+https://rstudio-pubs-static.s3.amazonaws.com/92478_6704b96865e449b4bad7acb71443c8bc.html
 
 ### baseパッケージ
-
-
 ```{r eval = FALSE}
 ```
-
 ### stringrパッケージ
+-->
 
 
+## stringrの主な関数
 
-## stringrの関数
+stringrでは主な関数は`str_`で始まるようになっている．
+これらの一覧は次のとおりである．
+ちなみに，`str_subset()`で正規表現に合致した要素だけを返している．
+
+```{r}
+ls("package:stringr") %>%
+  stringr::str_subset("^str_")
+```
+
+また，合致した以外のものを返すには，`negate = TRUE`とする．
+
+```{r}
+ls("package:stringr") %>%
+  stringr::str_subset("^str_", negate = TRUE)
+```
+
+このうちfruits，words，sentencesは，それぞれ果物の名前，一般的な単語，文のサンプルデータである．
+`fixed()`は正規表現を使わずに，文字列を正規表現ではなくそのままの文字列として使う関数である．
+これら以外のものについて知りたい場合は，ヘルプを参照して欲しい．
+
+```{r}
+  # stringr::str_detect()
+  # stringr::str_replace_all()
+  # stringr::str_c()
+  # stringr::str_detect()
+  # stringr::str_extract_all()
+  # stringr::str_length()
+  # stringr::str_split()
+  # stringr::str_subset()
+
+  # stringr::str_replace_all()
+  # stringr::str_to_lower()
+
+```
 
 
+## 活用例
 
-## stringrの利点
+```{r}
+fs::dir_ls()
 
-少なくとも自分の経験では，stringrだけで操作が完結することはほとんどない．
-逆に，パッケージ開発をしていてstringr(やdplyr)を使わずに一日が終わることもあまりない．
-つまり，stringrはかなり便利で必要不可欠なツールである．
-もちろん，baseパッケージの同様の関数を使っても機能上は問題ないことが多い．
-でも，引数の指定方法に一貫性があると，コードを綺麗に書くことができる．
-綺麗なコードは，汚いコードよりも書きやすいし，見た目も良いし，何よりもバグが入りにくい(入らないわけではない)．
+  # fs.Rmd
+  # fs::path_dir("path")         # パスからディレクトリ名抽出   
+  # fs::path_file("path")        # パスからファイル名抽出   
+  # fs::path_ext("path")         # パスから拡張子抽出   
+  # fs::path_ext_remove("path")  # パスから拡張子を削除   
+  # path_ext_set("path", "new_ext")   # 拡張子変更   
+
+```
 
