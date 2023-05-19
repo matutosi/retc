@@ -13,7 +13,7 @@ rmd_files:
 - "assoc.Rmd"                 # 
 - "magrittr.Rmd"              # 
   # - "tidyverse.Rmd"         # 
-  # - "dplyr.Rmd"                 # 
+  # - "dplyr.Rmd"             # 
 - "stringr.Rmd"               # 
 - "lubridate.Rmd"             # 
 - "fs.Rmd"                    # 
