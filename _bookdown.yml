@@ -12,8 +12,7 @@ rmd_files:
 - "package.Rmd"               # 
 - "assoc.Rmd"                 # 
 - "magrittr.Rmd"              # 
-  # - "tidyverse.Rmd"         # 
-  # - "dplyr.Rmd"             # 
+- "tidyverse.Rmd"             # 
 - "stringr.Rmd"               # 
 - "lubridate.Rmd"             # 
 - "fs.Rmd"                    # 
@@ -22,7 +21,6 @@ rmd_files:
 - "keyboardsimulator.Rmd"     # 
 - "ggplot2.Rmd"               # 
 - "rvest.Rmd"                 # 
-  # - "rvest_amazon.Rmd"      # 
 - "rselenium.Rmd"             # 
 - "magick.Rmd"                # 
 - "dbi.Rmd"                   # 
@@ -30,6 +28,7 @@ rmd_files:
 - "qpdf.Rmd"                  # 
 - "RDCOMClient.Rmd"           # 
 - "microsoft365r.Rmd"         # 
-  # - authors_note.Rmd
+  # - authors_note.Rmd            # 
 
   # fs::dir_ls(regexp = "Rmd")
+  # - "rvest_amazon.Rmd"      # 
