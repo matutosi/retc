@@ -39,20 +39,33 @@ library(reticulate)
 ```
 
 さらに，[使用するPythonの指定](#identify_python)を参考にreticulateで使用するPythonを指定する．
-以下のように直接Pythonのパスを指定しても良いし，`find_python()`を使用しても良い．
+automaterパッケージの`find_python()`を使用すると，楽に指定ができる．
+インストール済のPythonを探して1つだけのときはそのパスを出力する．
+複数ある場合は選択肢からユーザが選んだパスが出力される．．
 
 ```{r, echo = FALSE}
-find_python <- function(){
-  os <- automater::get_os()
-  python_path <- 
-    ifelse(os == "win", "where python", "which python") %>%
-    system(intern = TRUE) %>%
-    fs::path() %>%
-    stringr::str_subset("Python311")
-  return(python_path)
-}
-reticulate::use_python(find_python()[1])
+automater::find_python() %>%
+  reticulate::use_python()
 ```
+
+find_pythonの中身は以下のとおりである．
+
+```{r, eval = FALSE}
+find_python <- function(){
+  os <- get_os()
+  python_path <- ifelse(os == "win", "where python", "which python") %>% 
+    system(intern = TRUE) %>% fs::path()
+  if (length(python_path) > 1) {
+    choice <- menu(python_path, title = "Select Python path")
+  }
+  else {
+    choice <- 1
+  }
+  return(python_path[choice])
+}
+```
+
+もちろん，自分でPythonのパスを指定しても良い．
 
 ```{r, eval = FALSE}
 reticulate::use_python("your_python_path")
@@ -169,14 +182,24 @@ pag$moveTo(100, 100, duration=3)
 
 img <- "D:/matu/work/ToDo/automater/inst/img/up_arrow.png"
 position <- pag$locateOnScreen(img)
-get_center <- function(position){
+center <- function(position){
   x <- position$left + (position$width / 2)
   y <- position$top +  (position$height / 2)
   return(list(x = x, y = y))
 }
-get_center(position)
-pag$moveTo(get_center(position)$x, get_center(position)$y)
+center(position)
+pag$moveTo(center(position)$x, center(position)$y)
 ```
+
+画像をもとにクリックする位置を取得する場合，画面全体を検索すると時間がかかる．
+設定にもよるが，USBメモリの取り出しやwifiへの接続なら画面の右下，スタートメニューなら画面の中央か左下のように，ある程度の位置が決まっているので，その領域のみ検索すれば動作が早くなる．
+そこで，検索する領域を画面サイズから位置を指定する．
+パソコンの設定を見て手入力しても良いが，rJavaを使うと，画面サイズの取得が可能かもしれない．
+「かもしれない」というのは理由があって，rJavaパッケージはその名のとおりRからJavaを利用するものだが，うまく動作しないことがあるからだ．
+通常のパッケージならインストールして呼び出せば，そのまますぐに使えるはずだが，rJavaはうまくいかないことがある．
+OSにインストールされているJavaのバージョンとRとの関係や，パスの設定の関係でエラーが出て動かないことがある．
+
+次のコードを実行してうまく動けばこれを使って画面サイズを取得する．
 
 ```{r window_size, eval = FALSE}
   # C:\Users\matu>java -version
@@ -187,6 +210,7 @@ pag$moveTo(get_center(position)$x, get_center(position)$y)
   # PATH=C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Java\jre1.8.0_361\bin\client
   # ユーザの環境変数
   #   C:\Program Files (x86)\Java\jre1.8.0_361\bin\client
+install.packages("rJava")
 library(rJava)
 .jinit()
 toolkit <- J("java.awt.Toolkit")
@@ -196,12 +220,46 @@ width <- .jcall(dim, "D", "getWidth")
 height <- .jcall(dim, "D", "getHeight")
 ```
 
+rJavaがだめな場合には他の方法がある．
+Windowsであれば，次のコードのように`system()`を使ってコマンドを入力して情報を得ることができる．
+ただし，この場合は注意が必要で，ここで取得したのは画面の解像度であって，KeyboardSimulatorで指定するマウスの位置ではないことがある．
+高解像度の画面の場合は，画面を125\%に拡大していることがあるためだ.
+その場合は，ここで得た値を1.25で割る必要がある．
+
+```{r, eval = FALSE}
+  #   https://stackoverflow.com/questions/7305244/how-can-i-get-the-screen-resolution-in-r
+library(tidyverse)
+  # cmd <- "wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution /format:value"
+item <- c("CurrentHorizontalResolution", "CurrentVerticalResolution")
+cmd <- paste0("wmic path Win32_VideoController get ", item, " /format:value")
+resol <- 
+  cmd %>%
+  purrr::map(system, intern = TRUE) %>%
+  purrr::map(paste0, collapse = "") %>%
+  purrr::map_chr(stringr::str_replace_all, "[A-z\\r=]+", "") %>%
+  as.double()
+```
+
+rJavaもダメで，`system()`を使っても注意が必要でといろいろと自動化も大変である．
+自動化すれば手を抜けるが，手を抜くための努力は必要だ．
+著者も色々と試行錯誤したが，結局たどり着いた簡単な方法は次のように`mouse.move()`でマウスをありえないぐらい右下に移動して，その位置を取得する方法だ．
+幸いなことに，`mouse.move()`はありえない位置を指定してもエラーにはならず，最大限可能なところまで移動してくれる．
+最大限に移動した位置を取得すれば完了だ．
+画面の最大値とマウスの位置が1つずれているのは，画面の左上が[1,1]ではなく[0,0]のためだ．
+
+```{r, eval = FALSE}
+KeyboardSimulator::mouse.move(999999,999999)
+KeyboardSimulator::mouse.get_cursor()
+```
+
+
+
 ```{r, eval = FALSE}
 recog_image_click <- function(img, pag, ...){
   position <- 
     img %>%
     pag$locateOnScreen(...) %>%
-    get_center()
+    center()
   automater::mouse_move_click(position$x, position$y)
 }
 w <- 600
@@ -226,17 +284,3 @@ PyAutoGUIで画像認識した場所にマウスポインターを動かして�
 https://take-tech-engineer.com/pyautogui-image/
 pyautogui.click('button.png') # Find where button.png appears on the screen and click it.
 -->
-
-
-  #   https://stackoverflow.com/questions/7305244/how-can-i-get-the-screen-resolution-in-r
-  suppressWarnings(
-    current_resolution <- system("wmic path Win32_VideoController get CurrentHorizontalResolution,CurrentVerticalResolution /format:value", intern = TRUE)  %>%
-      strsplit("=") %>%
-      unlist() %>%
-      as.double()
-  )
-  current_resolution <- current_resolution[!is.na(current_resolution)]
-  current_resolution / 1.25
-
-KeyboardSimulator::mouse.move(999999,999999)
-KeyboardSimulator::mouse.get_cursor()
