@@ -59,9 +59,9 @@ devtools::install_local("d:/rMouse_0.1.zip")
 CRANに登録されているパッケージは，2023年5月現在で2万近くになっている．
 たくさんあることは嬉しい反面，目的とするパッケージを検索するのは困難である．
 パッケージ一覧のページで検索しても良いが，ブラウザでは正規表現が使えないことが多い．
-そこで，とりあえずパッケージの一覧を取得して，自分のパソコンの中に一覧を保存して，その後でRやエディタの正規表現を用いて検索できるようにする．
+そこで，パッケージの一覧を取得して，自分のパソコンの中に一覧を保存して，その後でRやエディタの正規表現を用いて検索できるようにする．
 
-```{r}
+```{r, eval = FALSE}
 library(tidyverse)
 library(magrittr)
 library(rvest)
@@ -82,15 +82,14 @@ pkgs <-
 readr::write_tsv(pkgs, "pkgs.txt") # readrは第???章を参照
 
 dplyr::filter(pkgs, stringr::str_detect(description, "Image|image"))
-  # pkgs %>%
-  #   dplyr::filter(stringr::str_detect(description, "Image|image")) %>%
-  #   print(n = nrow(.))
 ```
 
 詳しい説明は省略するが，以下を実行すると`pkgs.txt`というテキストファイルが作業ディレクトリに保存される．
 また，「Image」か「image」が`description`に含まれるものが出力される．
 すべてを画面に出力したい場合は，最後にコメントアウトした3行を実行する．
 検索結果を`write_tsv()`でテキストファイルとして保存するのも良いだろう．
+
+パッケージとその説明の一覧を分析する方法は，tidyverseの章を参考にしてほしい．
 
 ## GitHubから {#github}
 
