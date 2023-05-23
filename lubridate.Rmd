@@ -164,7 +164,7 @@ same_pos_next_yr <- function(x){
   for(i in seq_along(same_pos)){
     if(month(same_pos[i]) != mn[i]){
       same_pos[i] <- NA
-      warning("No same position day with ", x[i], "!")
+      warning("No same date as ", x[i], "!")
     }
   }
   return(same_pos)
