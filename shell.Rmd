@@ -195,6 +195,68 @@ res
 最後に"Successfully installed pip-23.1.2"のような表記があれば，バージョンアップ成功である．
 これでPythonおよびライブラリPillowとPyAutoGUIのインストールさらにpipのバージョンアップが完了した．
 
+## Windowsでのアプリ・ディレクトリの瞬間起動 {#run_in a_second}
+
+ここでは，Windowsでの便利な機能を紹介する．
+Pathの通ったところにショートカットを保存し，アプリやディレクトリを一発で起動できるというものである．
+これは非常に便利な機能である．
+デスクトップが多くのアプリのショートカットがあったり，スタートメニューからアプリを探す人にはぜひ使ってほしい．
+これを覚えておくだけでもかなりの時間が節約できるだろう．
+
+- ショートカットをパスの通ったディレクトリに保存   
+- [Win] + [R] で「ファイル名を指定して実行」を起動    
+- ショートカットの名称を入力して[Enter]   
+- アプリやディレクトリが起動する    
+なお，MacでもLinuxでもパスの通ったところにあるファイルやディレクトリであれば，シェルから起動できる．
+Windowsの「ファイル名を指定して実行」の代わりとして，MacはSpotlight([Command] + [Space])が使える．
+
+例えば，RStudioのショートカットをパスの通った"C:\Windows\System32"(システムファイルがあるので，パスが通っているはず)に"rst"という名前で保存すると(管理者権限が必要)，[Win] + [R]に続けて"rst"と入力するとRStudioを起動できる．
+他のディレクトリにショートカットを保存する場合は，そのディレクトリにパスを通しておく．
+
+上記のショートカットの作成やパスを通す作業はそれぞれ1回だけなのでマウスでの手作業でも全く問題ない．
+でもせっかくなので，ここではRからショートカットを作成する．
+もともとパスの通っている"C:\Windows\System32"にショートカットを作っても良いのだが，管理者権限が必要なためRからの操作が難しい．
+そこで，"C:\Windows\USERNAME\shortcut"(USERNAMEは環境によって異なる)というディレクトリを作成し，ここにショートカットを保存するとともに，パスを通すことにする．
+以下のコードでは，`shell()`を利用したautomaterの関数で，RStudioとRのショートカットを作成するとともに，ショートカットを作成したディレクトリにパスを通している．
+
+```
+  # RStudioのショートカット作成
+  # 実際のパスと異なる場合は変更する
+exe <- fs::path("C:/Program Files/RStudio/rstudio.exe")
+shortcut <- "rst"
+wd <- Sys.getenv("R_USER")
+size = 3
+res <- automater::make_shortcut(exe, shortcut = shortcut, size = size, wd = wd)
+
+  # Rのショートカット作成
+  # 実際のパスと異なる場合は変更する
+exe <- fs::path(Sys.getenv("R_HOME"), "bin/x64/Rgui.exe")
+shortcut <- "r"
+ # --no-restore：環境を復元しない，--no-save：終了時に保存しない
+ # --sdi：SDIで起動，--silent：起動時メッセージを出さない
+arg <- "--no-restore --no-save --sdi --silent"
+wd <- Sys.getenv("R_USER")
+size = 3
+res <- automater::make_shortcut(exe, shortcut = shortcut, arg = arg, size = size, wd = wd)
+
+  # ショートカットを作成したディレクトリにパスを通す
+new_path <- 
+  fs::path_dir(res$shortcut) %>%
+  automater::add_path()
+```
+
+これで，[Win] + [R]で出てきた「ファイル名を指定して実行」に"rst"を入力すればRStudio，"r"を入力すればRが起動する．
+
+
+なお，`automater::make_shortcut`と`automater::add_path`の中身は以下のとおりである．
+独自で関数を作成する際の参考になれば幸いである．
+
+```{r}
+automater::make_shortcut
+automater::add_path
+```
+
+
 <!--
   # Rから実行しなくても良いことではあるし，普通はシェルを使えば良い．
   # また，RStudioのTerminalを使っても同じことはできる．
@@ -234,7 +296,7 @@ purrr::map()
 
   ## 
 以下のような操作を自動化する．
-・複数のフォルダに入ったPDFファイルを1つのPDFに結合
+・複数のディレクトリに入ったPDFファイルを1つのPDFに結合
 ・結合後のファイルを指定場所に移動
 ・元ファイルを削除
 
