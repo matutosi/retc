@@ -28,6 +28,7 @@ rmd_files:
 - "qpdf.Rmd"                  # 
 - "RDCOMClient.Rmd"           # 
 - "microsoft365r.Rmd"         # 
+  # - pkg.Rmd                     # 
   # - authors_note.Rmd            # 
 
   # fs::dir_ls(regexp = "Rmd")
