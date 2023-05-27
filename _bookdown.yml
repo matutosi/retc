@@ -17,6 +17,7 @@ rmd_files:
 - "lubridate.Rmd"             # 
 - "fs.Rmd"                    # 
 - "shell.Rmd"                 # 
+- "deeplr.Rmd"                # 
 - "reticulate.Rmd"            # 
 - "keyboardsimulator.Rmd"     # 
 - "ggplot2.Rmd"               # 
@@ -28,6 +29,7 @@ rmd_files:
 - "qpdf.Rmd"                  # 
 - "RDCOMClient.Rmd"           # 
 - "microsoft365r.Rmd"         # 
+- "officer.Rmd"               # 
   # - pkg.Rmd                     # 
   # - authors_note.Rmd            # 
 
