@@ -1,13 +1,19 @@
-# RDCOMClientでpdfとdocxを相互変換 {#RDCOMClient}
+# RDCOMClientでMS WordやExcelと他形式と相互変換する {#RDCOMClient}
 
-RDCOMClientはWindowsに特化したパッケージのため他のOSでは利用できない．
+RDCOMClientはWindowsに特化したパッケージであるが，これを使うとMS WordやExcelの操作が可能である．
+ここでは，WordおよびExcelを他のファイル形式に変換したり，その逆の方法を紹介する．
+また，操作対象のWordやExcelがインストールされている必要がある．
 
+<!--
+  # https://github.com/omegahat/RDCOMClient
+library(RDCOMClient)
+ls("package:RDCOMClient")
+-->
 
 ## 準備
 
-
 CRANには登録されておらず，ウェブページかGitHubからインストールする．
-`install.packages()`でインストールする場合は，バイナリなので比較的時間が早いがRのバージョンによってはうまくインストールできないかもしれない．
+`install.packages()`でインストールする場合は，バイナリなので比較的時間が早いが，Rのバージョンによってはうまくインストールできないかもしれない．
 `install_github()`の場合は，コンパイルするのに少し時間がかかる．
 
 ```{r eval = FALSE}
@@ -23,7 +29,7 @@ library(RDCOMClient)
 library(automater)
 ```
 
-## RDCOMClient
+## ドキュメントの形式変換
 
 ```{r, message = FALSE}
 convert_docs
@@ -59,6 +65,11 @@ convert_docs
 - `qpdf_combine()`で結合
 
 
+##スプレッドシートの形式変換
+
+
+
+
 <!--
 ```{r eval = FALSE}
 files <- 
@@ -67,7 +78,6 @@ files <-
 files %>%
   purrr::walk(convert_docs, format = "pdf")
 ```
-
 
 
 ### 変換実行
@@ -118,16 +128,20 @@ testthat::expect_equal(path_docx("a.pdf"                 ), "d:/matu/work/tmp/a.
 testthat::expect_equal(path_docx("d:/matu/work/tmp/a.pdf"), "d:/matu/work/tmp/a.docx"     )
 testthat::expect_equal(path_docx("test/a.pdf"            ), "d:/matu/work/tmp/test/a.docx")
 testthat::expect_equal(path_docx("/test/a.pdf"           ), "d:/matu/work/tmp/test/a.docx")
-
-
-wd <- "d:/"
-setwd(wd)
-pdf2docx("a.pdf")
 ```
 
 
-## pdf2docx
-
-```{r eval = FALSE}
 ```
--->
+ワードの新規ファイル作成
+  # https://stackoverflow.com/questions/67378245/r-rdcomclient-find-and-replace-in-word-doc
+  #   https://andrisignorell.github.io/DescTools/reference/GetNewWrd.html
+  # library(tidyverse)
+  # library(RDCOMClient)
+  # wordApp <- COMCreate("Word.Application")
+  # wordApp[["Visible"]] <- TRUE
+  # wordApp[["DisplayAlerts"]] <- FALSE
+  # doc <- wordApp[["Documents"]]$Add()
+  # path <- normalizePath("D:/matu/work/ToDo/retc/doc/test.docx")
+  # doc$SaveAs(path)
+  # wordApp$quit()
+```
