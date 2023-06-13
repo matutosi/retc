@@ -100,3 +100,20 @@ dplyr::filter(pkgs, stringr::str_detect(description, "Image|image"))
 install.packages("devtools")
 devtools::install_github("matutosi/ecan")
 ```
+
+
+```
+validate_package_version <- function(pkg, version, 
+                                     site = "", 
+                                     upgrade = "never"){
+  if(!require(pkg)){
+    devtools::install_github(site, upgrade = upgrade)
+  }else
+   # installed - need < 0
+  if(compareVersion(as.character(packageVersion(pkg)), version) < 0){
+    detach(paste0("package:", pkg))
+    devtools::install_github(site, upgrade = upgrade)
+  }
+}
+function("moranajp", "0.9.6.11000", site = "matutosi/moranajp")
+```
