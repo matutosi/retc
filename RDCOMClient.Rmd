@@ -19,8 +19,8 @@ CRANには登録されておらず，ウェブページかGitHubからインス�
 ```{r eval = FALSE}
   # どちらか一方でうまくいけばOK
 utils::install.packages("RDCOMClient", repos = "http://www.omegahat.net/R", type = "win.binary")
-devtools::install_github("omegahat/RDCOMClient")
-devtools::install_github("matutosi/automater")
+remotes::install_github("omegahat/RDCOMClient")
+remotes::install_github("matutosi/automater")
 ```
 
 ```{r, message = FALSE}
