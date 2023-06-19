@@ -6,13 +6,13 @@
 qpdfはPDF操作のためのパッケージである．
 著者作パッケージのであるautomaterをインストールするが，これはCRANには登録していない．
 いずれはCRANに登録したいと思っているが，現段階ではGitHubで公開している．
-そのため，install.packages()ではなく，devtools::install_github()を使ってインストールする．
+そのため，install.packages()ではなく，remotes::install_github()を使ってインストールする．
 
 
 ```{r eval = FALSE}
 install.packages("qpdf")
 install.packages("devtools")
-devtools::install_github("matutosi/automater")
+remotes::install_github("matutosi/automater")
 ```
 
 ```{r message = FALSE}
@@ -118,7 +118,7 @@ if(! pkg %in% installed.packages()[,1]){
 pkg <- "automater"
 ver <- utils::packageDescription(pkg, fields = "Version")
 if(utils::compareVersion(ver, "0.2.0") < 0){
-  devtools::install_github("matutosi/automater", upgrade = "never", force = TRUE)
+  remotes::install_github("matutosi/automater", upgrade = "never", force = TRUE)
 }
 
 automater::validate_package("qpdf")
