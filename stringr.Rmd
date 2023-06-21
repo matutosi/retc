@@ -77,10 +77,12 @@ ls("package:stringr") %>%
   # stringr::str_split()
   # stringr::str_subset()
   # stringr::str_sub()
-stringr::str_dup()
-stringr::str_extract()
-stringr::str_pad()
-stringr::str_trunc()
+
+  # stringr::str_dup()
+  # stringr::str_extract()
+  # stringr::str_pad()
+  # stringr::str_trunc()
+
   # stringr::str_replace_all()
   # stringr::str_to_lower()
 
@@ -89,18 +91,18 @@ stringr::str_trunc()
 
 ## 活用例
 
-```{r}
-fs::dir_ls()
+```{r, eval = FALSE}
+  # fs::dir_ls()
 
   # パッケージ名の一覧を検索するという活用例
-fs::dir_ls(regexp = "Rmd")
-install.packages("")
-library()
-pkg::fun()
+  # fs::dir_ls(regexp = "Rmd")
+  # install.packages("")
+  # library()
+  # pkg::fun()
 
 
-stringr::fixed()
-stringr::regex()
+  # stringr::fixed()
+  # stringr::regex()
 
   # fs.Rmd
   # fs::path_dir("path")         # パスからディレクトリ名抽出   
