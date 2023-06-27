@@ -19,6 +19,7 @@ svg形式の画像を読み込む場合は，rsvgパッケージもインスト�
 install.packages("magick")
 install.packages("rsvg")
 install.packages("webshot")
+webshot::install_phantomjs()
 ```
 
 ```{r, message = FALSE}
@@ -102,8 +103,8 @@ urls <-
   list("http://jpnrdb.com/search.php?mode=spec",
        "http://jpnrdb.com/search.php?mode=key&q=ニッコウキスゲ",
        "http://jpnrdb.com/search.php?mode=map&q=06050095259")
-pngs <- paste0("img/rvest_", 1:3, ".png")
-purrr::map2(urls, pngs, webshot::webshot)
+pngs <- paste0("rvest_", 1:3, ".png")
+purrr::map2(urls, paste0("img/", pngs), webshot::webshot)
 ```
 
 `image_crop()`をそのまま使っても便利ではあるが，切り出しサイズ・位置の指定方法([width]x[height]+[xpos]+[y])がどうも個人の性に合わない．
@@ -137,12 +138,12 @@ magick_crop <- function(image, left_top, right_bottom){
 
 ```{r}
 crop_1 <- 
-  magick::image_read(pngs) %>%
+  magick::image_read(paste0("img/", pngs)) %>%
   automater::magick_crop(c(100, 0), c(890, 560)) %>%
   as.list() %>%
   purrr::map2_chr(., paste0("img/crop1_", pngs), magick::image_write)
 crop_2 <- 
-  magick::image_read(pngs) %>%
+  magick::image_read(paste0("img/", pngs)) %>%
   automater::magick_crop(c(100, 0), c(890, 980)) %>%
   as.list() %>%
   purrr::map2_chr(., paste0("img/crop2_", pngs), magick::image_write)

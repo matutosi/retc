@@ -42,6 +42,8 @@ install.packages(pkg)
 
 ## アーカイブされたパッケージ
 
+<img src="img/packages_01.png" width="50%">
+
 zipファイルとしてアーカイブ化されている場合は，`devtools::install_local()`でインストールできる．
 例えば，過去にCRANに登録されたていたが削除されたパッケージやパッケージの古いバージョンである．
 CRANの一覧からは削除されても，アーカイブ化されたものが保存されているため，そこからzipファイルをダウンロードできる．
@@ -61,6 +63,8 @@ CRANに登録されているパッケージは，2023年5月現在で2万近く�
 たくさんあることは嬉しい反面，目的とするパッケージを検索するのは困難である．
 パッケージ一覧のページで検索しても良いが，ブラウザでは正規表現が使えないことが多い．
 そこで，パッケージの一覧を取得して，自分のパソコンの中に一覧を保存して，その後でRやエディタの正規表現を用いて検索できるようにする．
+
+<img src="img/packages_02.png" width="50%">
 
 ```{r, eval = FALSE}
 library(tidyverse)
@@ -100,6 +104,9 @@ dplyr::filter(pkgs, stringr::str_detect(description, "Image|image"))
 install.packages("devtools")
 remotes::install_github("matutosi/ecan")
 ```
+
+<img src="img/packages_03.png" width="50%">
+
 
 
 ```

@@ -9,6 +9,7 @@ Sys.setlocale("LC_TIME", "en_US.UTF-8") # アメリカ英語に設定
 date <- lubridate::ymd("2022-5-1")
 ym <- paste0("^", year(date), "年", month(date) , "月")
 
+  # date <- today()
 main <- "https://www.aboutamazon.jp/news/entertainment/amazon-prime-video-new-content-"
 url_amz <- 
   month(date, label = TRUE, abbr = FALSE) %>%
