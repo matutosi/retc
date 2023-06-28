@@ -40,6 +40,9 @@ today() + months(0:4)
 today() + months(0:4)
 ```
 
+なお，`today()`はそのときの本日の日付を返す関数のため，上記の表示と読者が実行したときの表示は異なるはずである．
+また，引数`tzone`を指定するとタイムゾーンを指定でき，日本の場合は`today("Asia/Tokyo")`，グリニッジ標準時の場合は，`today("GMT")`とする．
+
 ## 文字列からDateクラスへの変換
 
 日本語の表記でよく出てくる年・月・日の順の日付表記は，関数`ymd()`でDateクラスに変換できる．
@@ -98,7 +101,7 @@ wday(x, label = TRUE)
 日付固定の場合は，既に説明したように非常に簡単に求められる．
 
 ```{r}
-x <- today()
+x <- ymd("2023-05-01")
 x + years(1)
 ```
 
@@ -126,12 +129,13 @@ sum(real != expect, na.rm = TRUE)
 `real != expect`，つまり`real`と`expect`異なるときはTRUEになる．
 この合計が0であれば全部が同じなので，計算結果は正しいといえる．
 
-<!--
-  # testthat::expect_equal(real, expect)
+
+```{r}
+testthat::expect_equal(real, expect)
+```
+
 念のため，パッケージtestthatで確認する．
 testthat::expect_equal()の結果として，何も出力されなければテストを通過したことが分かる．
--->
-
 
 
 次に，年月日から1年後の
@@ -187,7 +191,7 @@ x <- today()
 実際の日付で確認してみる．
 
 ```{r}
-days   <- today() + (0:30)
+days   <- x + (0:30)
 days_n <- same_pos_next_yr(days)
 days
 days_n
@@ -198,26 +202,45 @@ days_n
 
 各日付が第何の曜日かを確認してみる．
 
-```{r}
+```{r, eval = FALSE}
 mweek(days)   # 第何の曜日か
+## [1] 1 1 1 1 1 1 1 2 2 2 2 2 2 2 3 3 3 3 3 3 3 4 4 4 4 4 4 4 5 5 5
 mweek(days_n)
+## [1]  1  1  1  1  1  1  1  2  2  2  2  2  2  2  3  3  3  3  3  3  3  4  4  4  4  4  4  4 NA NA  5
 sum(mweek(days) != mweek(days_n), na.rm = TRUE)
-  # testthat::expect_equal(mweek(days), mweek(days_n))
+## [1] 0
+testthat::expect_equal(mweek(days), mweek(days_n))
+## Error: mweek(days) not equal to mweek(days_n).
+## 2/31 mismatches (average diff: NaN)
+## [29] 5 - NA == NA
+## [30] 5 - NA == NA
 ```
 
-最後の方でエラーが出ている．
+少しだけNAのところがあるが，それ以外はうまくいっているようだ．
+testthatでのテストでも29日目と30日目がうまく行っていないことがわかる．
+
 さらに，曜日も確認してみる．
 
-```{r}
+```{r, eval = FALSE}
 wday(days, label = TRUE)   # 曜日
+##  [1] 月 火 水 木 金 土 日 月 火 水 木 金 土 日 月 火 水 木 金 土 日 月 火 水 木 金 土 日 月 火 水
+## Levels: 日 < 月 < 火 < 水 < 木 < 金 < 土
 wday(days_n, label = TRUE)
+##  [1] 月   火   水   木   金   土   日   月   火   水   木   金   土   日   月   火   水   木   金   土  
+## [21] 日   月   火   水   木   金   土   日   <NA> <NA> 水  
+## Levels: 日 < 月 < 火 < 水 < 木 < 金 < 土
 sum(wday(days) != wday(days_n), na.rm = TRUE)
-  # testthat::expect_equal(wday(days), wday(days_n))
+## [1] 0
+testthat::expect_equal(wday(days), wday(days_n))
+## Error: wday(days) not equal to wday(days_n).
+## 2/31 mismatches (average diff: NaN)
+## [29] 2 - NA == NA
+## [30] 3 - NA == NA
 ```
 
 こちらも，最後の方でエラーが出ている．
-このエラーは，第5週でずれるためでてくる部分である．
-ただし，閏年以外の2月だけは4週にピッタリ収まるので，エラーが出ないはずだ．
+なお，このエラーは第5週でずれるためにでてくる部分である．
+ただし，28日しかない2月だけは4週にピッタリ収まるので，エラーが出ないはずだ．
 
 テストもだいたいあっていそうだが，分かりにくいため，カレンダーで表示してみる．
 
