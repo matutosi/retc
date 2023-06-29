@@ -9,6 +9,13 @@ xlsxパッケージを使うと，エクセルのファイルの読み込み・�
 library(tidyverse)
 ```
 
+```{r, echo = FALSE}
+  # ls("package:xlsx")
+  # https://cran.r-project.org/web/packages/openxlsx/index.html
+  # https://cran.r-project.org/web/packages/xlsx/index.html
+```
+
+
 
 ## オートフィルタの設定とウィンドウ枠の固定の自動化スクリプト
 
