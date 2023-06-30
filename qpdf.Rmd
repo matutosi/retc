@@ -74,11 +74,11 @@ pdf_subset(input, pages = 1, output = NULL, password = "")
 拡張子の関連付けは，[スクリプトの関連付け](#assoc)を参照して欲しい．
 
 ```{r}
-system.file("rsc/split_qpdf.rsc", package = "automater") %>%
+fs::path_package("automater", "rsc", "split_qpdf.rsc")
   readLines() %>%
   paste0(collapse = "\n") %>%
   cat()
-  # system.file("rsc/split_qpdf.rsc", package = "automater") %>%
+  # fs::path_package("automater", "rsc", "split_qpdf.rsc")
   #   readtext::readtext(verbosity = 0) %>%
   #   `[[`("text") %>%
   #   cat()
@@ -152,7 +152,7 @@ pdf_combine(input, output = NULL, password = "")
 特定のディレクトリ内のPDFファイルを1つのPDFファイルとして結合することを自動化するスクリプトは以下のとおりである．
 
 ```{r}
-system.file("rsc/combine_qpdf.rsc", package = "automater")
+fs::path_package("automater", "rsc", "combine_qpdf.rsc")
   readLines() %>%
   paste0(collapse = "\n") %>%
   cat()

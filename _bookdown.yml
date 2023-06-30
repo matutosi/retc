@@ -26,6 +26,7 @@ rmd_files:
 - "magick.Rmd"                # 
 - "dbi.Rmd"                   # 
 - "xlsx.Rmd"                  # 
+- "openxlsx.Rmd"              # 
 - "qpdf.Rmd"                  # 
 - "RDCOMClient.Rmd"           # 
 - "microsoft365r.Rmd"         # 

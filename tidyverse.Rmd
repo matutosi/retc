@@ -172,7 +172,9 @@ household %>%
 ```
 -->
 
+<!--
 なお，手前味噌で申し訳ないが，ピボットテーブルをより簡単に作成するためのパッケージpivoteaを作成したので，興味があれば使ってみてほしい．
+-->
 
 https://cran.r-project.org/web/packages/pivotea/
 

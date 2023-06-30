@@ -13,6 +13,17 @@ library(tidyverse)
   # ls("package:xlsx")
   # https://cran.r-project.org/web/packages/openxlsx/index.html
   # https://cran.r-project.org/web/packages/xlsx/index.html
+
+  # https://rdrr.io/cran/openxlsx/man/addFilter.html
+  # library("openxlsx")
+  # ls("package:openxlsx")
+file <- "d:/book1.xlsx"
+wb <- openxlsx::loadWorkbook(file)
+df <- openxlsx::readWorkbook(wb, 1)
+addFilter(wb, 1, row = 1, cols = 1:ncol(df))
+freezePane(wb, 1, firstCol = TRUE, firstRow = TRUE)
+openxlsx::saveWorkbook(wb, file, overwrite = TRUE)
+
 ```
 
 
