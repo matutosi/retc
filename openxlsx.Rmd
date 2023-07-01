@@ -40,16 +40,14 @@ timetable <-
 tmp <- fs::file_temp(ext = "xlsx")
 openxlsx::write.xlsx(timetable, tmp)
 wb <- openxlsx::loadWorkbook(tmp)
-  # shell(tmp)
 ```
 
-<img src="img/openxlsx_01.png" width="50%">
+<img src="img/openxlsx_01.png" width="70%">
 
 ## 列幅の変更，オートフィルタの設定，ウィンドウ枠の固定
 
 openxlsxでは，`setColWidths()`で列幅の変更，`addFilter()`でオートフィルタの設定，`freezePane()`ウィンドウ枠の固定ができる．
 ワークブック名やシート名などともに，それぞれで設定するべき値を指定する．
-列幅の指定では，
 なお，openxlsxでは副作用でワークブックの中身を更新するので，関数を適用したあとに，オブジェクトへの代入は不要である．
 不要というよりは，正確には代入してはならない．
 関数の戻り値が`invisible(0)`であるためだ．
@@ -68,10 +66,9 @@ for(sheet in sheets(wb)){
   openxlsx::freezePane(wb, sheet, firstCol = TRUE, firstRow = TRUE)
 }
 openxlsx::saveWorkbook(wb, tmp, overwrite = TRUE)
-  # shell(tmp)
 ```
 
-<img src="img/openxlsx_02.png" width="50%">
+<img src="img/openxlsx_02.png" width="70%">
 
 列幅の変更・オートフィルタの設定・ウィンドウ枠の固定のいずれもシートごとに作業しなければならない．
 これは手作業でもopenxlsxでも同じである．
@@ -88,23 +85,81 @@ openxlsxで自動化した場合でも，もちろんプログラムの実行時
 
 列幅・オートフィルタ・ウィンドウ枠の3点セットは，データを保存するワークブックであれば，設定しておきたいものなので，自動化と非常に相性が良い．
 それ以外にも，特定のところに罫線を引いて見栄えを良くしたいことがある．
-
 例えば，全体的には縦横に細線を，`grade`が変わるところには二重線を引くとする．
 
+フォントを変更したり，罫線を引いたり，セルの塗りつぶしをしたりするなどするには，まずは`createStyle()`でスタイルを作成する．
+詳細はヘルプで確認してほしいが，罫線に関しては`border`，`borderColour`，`borderStyle`で罫線の位置，色，種類を設定する．
+ここでは細線と二重線を使うので，それぞれの罫線をまず設定する．
 
 ```{r}
 sty_thn <- openxlsx::createStyle(border = "TopBottomLeftRight", borderStyle = "thin")
 sty_dbl <- openxlsx::createStyle(border = "top", borderStyle = "double")
+```
+
+設定したスタイルは，`addStyle()`で各セルに追加する．
+ワークブック，シート，スタイルセルの位置などを設定する．
+
+セルの位置指定では，`gridExpand`とすると，`rows`と`cols`の組み合わせを拡張してくれるので便利だ．
+具体的には，`rows = 1:10, cols = 2:3`とすると，1-10行目のB列とC列のセルすべて，つまり`B1:C10`という指定と同じになる．
+個別に設定したい場合は，`gridExpand`を設定しない．
+その場合は，`rows`と`cols`のベクトルの長さを同じにする必要がある．
+例えば，`rows = c(1, 3, 5), cols = c(2, 4, 6)`とすれば，`B1`，`D2`，`F5`のセルを指定できるが，
+`rows = c(1, 3, 5), cols = c(2, 4)`はエラーになる．
+
+`stack = TRUE`を指定すると，指定外の既存のスタイルに，さらにスタイルを積み重ねていく，つまり追加していくことができる．
+`stack = TRUE`を指定しないと，新たなスタイルが設定されるので，指定外のスタイルはデフォルトのものになる．
+
+```{r}
+wb <- openxlsx::loadWorkbook(tmp)
 for(sheet in openxlsx::sheets(wb)){
   df <- openxlsx::readWorkbook(wb, sheet)
   new_grade <- 
     seq_along(df$grade)[df$grade != dplyr::lag(df$grade)] %>%
     `[<-`(1, 1) %>%
     `+`(1)
-  openxlsx::addStyle(wb, sheet, style = sty_thn, rows = 1:nrow(df), cols = 1:ncol(df), gridExpand = TRUE)
+  openxlsx::addStyle(wb, sheet, style = sty_thn, rows = 1:nrow(df), cols = 1:ncol(df), gridExpand = TRUE, stack = TRUE)
   openxlsx::addStyle(wb, sheet, style = sty_dbl, rows = new_grade , cols = 1:ncol(df), gridExpand = TRUE, stack = TRUE)
 }
 openxlsx::saveWorkbook(wb, tmp, overwrite = TRUE)
+```
+<!--
+shell(tmp)
+-->
+
+上のコードでは，`grade`の境界だけを二重線にするためにちょっとややこしいコードになってしまっている．
+各シートのデータを`df`に代入しているので，学年のデータを`df$grade`として取得している．
+具体的には，`Automatic`では，以下のようになっている．
+
+```{r, echo = FALSE}
+df <- list()
+df$grade <- c("6", "6", "6", "6", "6", "6", "6", "7", "7", "7", "7", "7", "7", "7")
+```
+
+```{r}
+df$grade
+##  [1] "6" "6" "6" "6" "6" "6" "6" "7" "7" "7" "7" "7" "7" "7"
+```
+
+ここから，境界部分を取り出すために`lag()`で1つずらしたベクトルを作成して，元のベクトルと比較して，異なる位置を取得している．
+`[<-()`という関数は，`x[1] <- 1`のようなことをパイプの中で実行するためのものである．
+ここでは，`grade`の最初の部分にも二重線を引きたいので，1つ目の`NA`を置換している．
+また，`+()`も四則演算をパイプ内でするために通常の関数と同じように使っている．
+ここでは，1行目が列名であるため，1行ずらすために1を追加している．
+
+```{r eval = FALSE}
+seq_along(df$grade)[df$grade != dplyr::lag(df$grade)] %>%
+print() %>%
+`[<-`(1, 1) %>%
+print() %>%
+`+`(1)
+```
+
+若干説明が長くなってしまったが，上記のコードを実行すれば，エクセルのワークブックに罫線を引くことができる．
+1回だけの作業ならコードを書くのは面倒だが，何度も同じ作業を繰り返す場合は，コードを書く価値があるだろう．
+
+<img src="img/openxlsx_03.png" width="70%">
+
+```{r echo = FALSE, eval = FALSE}
 shell(tmp)
 ```
 
@@ -119,7 +174,7 @@ shell(tmp)
 さらに，`evenHeader`と`evenFooter`で偶数ページの，`firstHeader`と`firstFooter`で最初のページのヘッダーとフッターを指定することも可能である．
 
 
-<img src="img/openxlsx_03.png" width="50%">
+<img src="img/openxlsx_04.png" width="70%">
 
 
 ```
@@ -138,151 +193,82 @@ shell(tmp)
 wb <- openxlsx::loadWorkbook(tmp)
 setHeaderFooter(wb, 1, header = c("&[Date]", "ALL HEAD CENTER", "&[Page] / &[Pages]"))
 openxlsx::saveWorkbook(wb, tmp, overwrite = TRUE)
-  # shell(tmp)
 ```
 
 
 
 ## 作業の自動化
 
+上記作業のうち，列幅・オートフィルタ・ウィンドウ枠の3点セットは自動化しておいて損のない作業である．
+そこでここでは，これらを実行するスクリプトを作成し，特定のディレクトリにある全てのエクセルのワークブックに一発で設定できるようにする．
+基本的なコードは既に出来上がっているので，ファイル名の一覧を取得して，ファイルごとにforループで回すようにするだけだ．
+forループではなく，`purrr::map()`を使ってもよいのだが，イントールするパッケージを少なくするためにforを使っている．
 
+### スクリプトの内容
 
-## 
-
-
-
-## 
-xlsxの使用例として，オートフィルタを設定して・ウィンドウ枠を固定する自動化スクリプトを作成した．
-
-### 使用方法   
-- 準備：<a href="https://matutosi.github.io/retc/install.html">Rのインストール</a>    
-- 準備：<a href="https://gist.githubusercontent.com/matutosi/fe217c7ed934dd242d6798aca846d902/raw/c7b93586db398f801d469bd98a9e764a04a4a8e2/set_autofilter_freezepanel.rsc" download>set_autofilter_freezepanel.rsc</a>
-をダウンロード(右クリックして「名前を付けてリンク先を保存」)して，任意のフォルダに保存．   
-- 準備：<a href="https://matutosi.github.io/retc/assoc.html">スクリプトの関連付け</a>を参考にして，「.rsc」を「Rscript.exe」に関連付けする(Windowsの場合)．   
-   Macの場合は，<a href="https://pc-karuma.net/mac-extension-related-app-change/">Mac - 拡張子に関連付けられているアプリを変更する方法</a>などを参考にしてほしい．   
-- set_autofilter_freezepanel.rsc と同じフォルダに，処理したいエクセルのファイルを保存．   
-![](img/set_autofilter_freezepanel01.png){ width=80% }    
-- 実行前のエクセルのファイル   
-![](img/set_autofilter_freezepanel02.png){ width=40% }    
-- set_autofilter_freezepanel.rsc をダブルクリックして実行すると，コマンドのウィンドウでプログラムが実行される．   
-![](img/set_autofilter_freezepanel03.png){ width=40% }   
-プログラムが自動的にエクセルのファイルの1行目のA列からZ列までにオートフィルタを設定し，1行目と1列目でウィンドウ枠を固定する．
-複数ファイル・複数シートにも対応している．   
-なお，初回実行時は，xlsxパケージのダウンロードのため，少し時間がかかるかもしれない．
-2回目以降はファイル数が多すぎなければ，一瞬で処理されるはず．   
-実行後のエクセルのファイル   
-![](img/set_autofilter_freezepanel04.png){ width=40% }   
-
-### スクリプトの内容説明   
+Rに慣れていない人でもスクリプトを使えるようにするために，Rのインストールだけは必須であるが，それ以外の作業は自動化しておきたい．
+そこで，パッケージopenxlsxのインストールをスクリプトに含めている．
+あとは，fsパッケージの`dir_ls()`でエクセルの一覧を取得して，各ファイルに列幅の変更・オートフィルタの設定・ウィンドウ枠の固定の3点セットを実行する関数を適用すれば完成である．
 
 ```{r eval = FALSE}
-  # Package, 準備
-if(! "xlsx" %in% installed.packages()[,1]){  # xlsxパッケージ有無の確認
-  # パッケージが無い場合
-  options(repos = "https://cran.ism.ac.jp/") # ミラーサイトの設定
-  install.packages("xlsx")                   # パッケージのインストール
-}
-
-  # Functions, 関数
-  #   註：xlsxパッケージの関数は返り値の代入がない
-  #         副作用でシートなどを操作するため?
-  #         参照型を使っているため?
-  #   参考：通常のRの関数は，返り値の代入をすることが多い
-
-  # オートフィルタの設定
-set_auto_filter <- function(sh){
-  # A1からZ1までを設定
-  #   もっと多くの列で設定したければ，"A1:Z1"のところを修正する
-  xlsx::addAutoFilter(sh, "A1:Z1")
-}
-
-  # ウィンドウ枠の固定
-set_freeze_panel <- function(sh){
-  # 1列目と1行目のウィンドウ枠を固定
-  #   固定する場所の変更方法
-  #     2行目までを固定したい場合は，引数の2つ目と4つ目を，3にする
-  #     3列目までを固定したい場合は，引数の3つ目と5つ目を，4にする
-  xlsx::createFreezePane(sh, 2, 2, 2, 2)
+  # パッケージの確認
+if(!require("openxlsx", quietly = TRUE)){
+  options(repos = "https://cran.ism.ac.jp/")
+   utils::install.packages("openxlsx")
 }
 
   # ワークブックごとで設定
 set_af_fp <- function(file){
-  wb <- xlsx::loadWorkbook(file)   # ワークブックの読み込み
-  for(sh in xlsx::getSheets(wb)){  # シートの数だけ繰り返し
-    set_auto_filter(sh)            #   オートフィルタの設定
-    set_freeze_panel(sh)           #   ウィンドウ枠の固定
+  wb <- openxlsx::loadWorkbook(file)
+  for(sheet in openxlsx::sheets(wb)){
+    df <- openxlsx::readWorkbook(wb, sheet)
+    openxlsx::setColWidths(wb, sheet, cols = 1:ncol(df), width =  "auto")
+    openxlsx::addFilter(wb, sheet, row = 1, cols = 1:ncol(df))
+    openxlsx::freezePane(wb, sheet, firstCol = TRUE, firstRow = TRUE)
   }
-  xlsx::saveWorkbook(wb, file)     # ワークブクの保存
+  openxlsx::saveWorkbook(wb, file)
 }
 
-  # Main, 本体
-files <- list.files(pattern = "xls") # ".xls"と"xlsx"の一覧取得
-for(file in files){                  # ファイルの数だけ繰り返し
-  set_af_fp(file)                    # set_af_fp()の実行
+  # 本体
+files <- fs::dir_ls(regexp = "\\.xlsx*") # ".xls"と".xlsx"の一覧取得
+for(file in files){                      # ファイル数だけ繰り返し
+  set_af_fp(file)                        # set_af_fp()の実行
 }
 ```
 
+### 使用方法   
+- 準備：<a href="https://matutosi.github.io/retc/install.html">Rのインストール</a>    
 
-## ワークブックとシートの読み込み(ボツ?)
+- 準備：<a href="https://gist.githubusercontent.com/matutosi/fe217c7ed934dd242d6798aca846d902/raw/c7b93586db398f801d469bd98a9e764a04a4a8e2/set_autofilter_freezepanel.rsc" download>set_autofilter_freezepanel.rsc</a>
+をダウンロード(右クリックして「名前を付けてリンク先を保存」)して，任意のフォルダに保存．   
 
-エクセルのファイルは，複数のシートから構成されることが多く，複数のシートを束ねたものをワークブックとよぶ．
-openxlsxでは，ワークブック全体を読み込むこともできるし，シートを1つだけ読み込むこともできる．
+- 準備：<a href="https://matutosi.github.io/retc/assoc.html">スクリプトの関連付け</a>を参考にして，「.rsc」を「Rscript.exe」に関連付けする(Windowsの場合)．   
+   Macの場合は，<a href="https://pc-karuma.net/mac-extension-related-app-change/">Mac - 拡張子に関連付けられているアプリを変更する方法</a>などを参考にしてほしい．   
 
-Rのパッケージにはサンプルのデータが入っていることがあり，openxlsxパッケージでは`extdata`ディレクトリにサンプルがあるので，そのデータを使ってみる．
-まずは，一覧を取得する
+- set_autofilter_freezepanel.rsc と同じフォルダに，処理したいエクセルのファイルを保存．   
+![](img/set_autofilter_freezepanel01.png){ width=80% }    
 
-```{r}
-files <- 
-  fs::path_package("openxlsx", "extdata") %>%
-  fs::dir_ls(regexp = "\\.xlsx")
-fs::path_file(files)
-```
+- 実行前のエクセルのファイル   
+![](img/set_autofilter_freezepanel02.png){ width=60% }    
 
-ファイル名だけでは中身がよくわからないが，ここでは6番目のファイルを使う．
-
-
-```{r}
-wb <- 
-  files[6] %>%
-  openxlsx::loadWorkbook() %>%
-  print()
-## A Workbook object.
-## Worksheets:
-##  Sheet 1: "IrisSample"
-## (中略)
-##  Sheet 2: "testing"
-## (中略)
-##  Sheet 3: "mtcars"
-## (略)
-openxlsx::sheets(wb)
-```
-
+- set_autofilter_freezepanel.rsc をダブルクリックして実行すると，コマンドのウィンドウでプログラムが実行される．   
+![](img/set_autofilter_freezepanel03.png){ width=60% }   
+プログラムがオートフィルタを設定し，1行目と1列目でウィンドウ枠を固定する．
+複数ファイル・複数シートにも対応している．   
+なお，初回実行時は，openxlsxパケージのダウンロードのため，少し時間がかかるかもしれない．
+2回目以降はファイル数が多すぎなければ，一瞬で処理されるはず．   
+実行後のエクセルのファイル   
+![](img/set_autofilter_freezepanel04.png){ width=60% }   
 
 
 
 ```{r, echo = FALSE, eval = FALSE}
-  # ls("package:fs")
-file <- "d:/book1.xlsx"
-wb <- openxlsx::loadWorkbook(file)
-df <- openxlsx::readWorkbook(wb, 1)
-addFilter(wb, 1, row = 1, cols = 1:ncol(df))
-freezePane(wb, 1, firstCol = TRUE, firstRow = TRUE)
-openxlsx::saveWorkbook(wb, file, overwrite = TRUE)
-```
+  # 画像の切り出し(実行済み)
+pngs <- paste0("D:/matu/work/ToDo/retc/img/openxlsx_0", 1:3, ".png")
+pngs_crop <- paste0("D:/matu/work/ToDo/retc/img/crop_openxlsx_0", 1:3, ".png")
 
-
-```{r, echo = FALSE, eval = FALSE}
-  # ls("package:openxlsx")
-  # https://cran.r-project.org/web/packages/openxlsx/index.html
-  # https://cran.r-project.org/web/packages/xlsx/index.html
-
-  # https://rdrr.io/cran/openxlsx/man/addFilter.html
-  # library("openxlsx")
-  # ls("package:openxlsx")
-file <- "d:/book1.xlsx"
-wb <- openxlsx::loadWorkbook(file)
-df <- openxlsx::readWorkbook(wb, 1)
-addFilter(wb, 1, row = 1, cols = 1:ncol(df))
-freezePane(wb, 1, firstCol = TRUE, firstRow = TRUE)
-openxlsx::saveWorkbook(wb, file, overwrite = TRUE)
+magick::image_read(pngs) %>%
+  automater::magick_crop(c(0,0), c(1000,500)) %>%
+  as.list() %>%
+  purrr::map2_chr(., pngs_crop, magick::image_write)
 ```

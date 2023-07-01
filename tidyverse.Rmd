@@ -14,19 +14,21 @@ library(tidyverse)
 
 tidyverseは単一のパッケージではなく，9つのパッケージを含むパッケージ群である．
 
-- dplyr：データフレーム操作
-- forcats：ファクター(因子)操作
-- ggplot2：作図
-- lubridate：日付・時間データ
-- purrr：繰り返し処理
-- readr：ファイル読み込み・保存
-- stringr：文字列
 - tibble：データフレームの拡張型
 - tidyr：整然(tidy)データのツール
+- readr：ファイル読み込み・保存
+- dplyr：データフレーム操作
+- stringr：文字列
+- purrr：繰り返し処理
+- ggplot2：作図
+- lubridate：日付・時間データ
+- forcats：ファクター(因子)操作
 
 このうち，この文書ではファクター(因子)をほとんど扱っていないため，forcatsについては説明しない．
 ggplot2とlubridateはそれぞれ第?章と第?章で説明し，その他はこの章で説明する．
+<!--
 以下では全体に関係するものから説明するため，上記の順序とは異なる(上記はアルファベット順)．
+-->
 
 ## tibbleでデータフレームを使いやすくする
 
@@ -330,43 +332,164 @@ pkgs %>%
 
 また，重複行を除去する`distinct()`もよく使う関数である．
 
-<!--
-## tidyverseの関数一覧
+## stringrで文字列操作 {#stringr}
 
-```{r, eval = FALSE}
-tidyverse <- 
-  c("dplyr", "forcats", "ggplot2", "lubridate", 
-    "purrr", "readr", "stringr", "tibble", "tidyr")
-objs <- 
-  tidyverse %>% 
-  purrr::map( function(x){ tibble::tibble(pkg = x, obj = ls(paste0("package:", x))) } ) %>%
-  dplyr::bind_rows()
-dups <-
-  objs %>%
-  dplyr::count(obj) %>%
-  dplyr::filter(n > 1)
-objs %>%
-  dplyr::anti_join(dups) %>%
-  dplyr::filter(pkg == "tibble") %>%
-  `$`(obj)
-```
+stringrはstringiパッケージのラッパーである．
+stringiは文字列操作のパッケージで，文字コードの変換などを含む多様な関数を含んでいる．
+通常のユーザの文字列操作なら，stringrで大丈夫なことが多い．
+万が一，込み入った文字列操作が必要なときは，stringiの関数を探してみると良いだろう．
 
-```{r, eval = FALSE}
-ls("package:tibble")
-```
--->
+少なくとも自分の経験では，stringrだけで操作が完結することはほとんどない．
+逆に，パッケージ開発をしていてstringr(やdplyr)を使わずに一日が終わることもあまりない．
+つまり，stringrはかなり便利で必要不可欠なツールである．
+もちろんbaseパッケージの同様の関数を使っても機能上は問題ないことが多い．
+しかし，引数の指定方法に一貫性があると，コードを綺麗に書くことができる．
+綺麗なコードは，汚いコードよりも書きやすく，見た目が良く，何よりもバグが入りにくい(入らないわけではない)．
 
 
 <!--
-irisを例にするが，できれば，veganとかdaveのデータを使う
-tidy dataへの変換が必要
-コードのみか，詳しくは松村や比嘉の解説を参考に
+  ## stringrとbase
+https://heavywatal.github.io/rstats/stringr.html
+https://rstudio-pubs-static.s3.amazonaws.com/92478_6704b96865e449b4bad7acb71443c8bc.html
 
-gather()とspread()はpivot_longer()とpivot_wider()になって使いやすくなった．
-Hadley自身も使い方を混乱していたらしい
-
-  # kwds <- 
-  #   c("ocr", "deep learning", "machine learning", "excel", 
-  #     "database", "ggplot", "scraping", "pdf", "magick", 
-  #     "shell", "python", "js|javascript", "php")
+### baseパッケージ
+```{r eval = FALSE}
+```
+### stringrパッケージ
 -->
+
+### stringrの主な関数
+
+stringrでは主な関数は`str_`で始まるようになっている．
+これらの一覧は次のとおりである．
+ちなみに，`str_subset()`で正規表現に合致した要素だけを返している．
+
+```{r}
+ls("package:stringr") %>%
+  stringr::str_subset("^str_")
+```
+
+また，合致した以外のものを返すには，`negate = TRUE`とする．
+
+```{r}
+ls("package:stringr") %>%
+  stringr::str_subset("^str_", negate = TRUE)
+```
+
+このうちfruit，words，sentencesは，それぞれ果物の名前，一般的な単語，文のサンプルデータである．
+
+```{r}
+head(fruit)
+head(words)
+head(sentences)
+```
+
+`fixed()`は正規表現を使わずに，文字列を正規表現ではなくそのままの文字列として使う関数である．
+これら以外のものについて知りたい場合は，ヘルプを参照して欲しい．
+
+`str_c()`は文字列を結合する．
+
+```{r}
+stringr::str_c("eat ", fruit[1:3])
+```
+
+`str_detect()`は文字列の中に特定のパターンが含まれるかを検索して，`TRUE`あるいは`FALSE`を返す．
+
+
+```{r}
+stringr::str_detect(head(fruit), "ap")
+stringr::str_detect(head(fruit), "a")
+```
+
+パターンには正規表現を使うことができる．
+正規表現とは，抽象的に文字列を指定する方法である．
+例えば，「"a"あるいは"c"が含まれる」文字列を正規表現を使わずに検索するには以下のように`|`で論理和を求めることになる．
+
+```{r}
+stringr::str_detect(head(fruit), "a") | stringr::str_detect(head(fruit), "c")
+```
+
+これは重複部分が非常に多いので，非効率である．
+そこで正規表現を使って，「"a"あるいは"c"」を表現する．
+方法はいくつかあるが，`[]`で囲むとその中の文字列のいずれかとのパターンになる．
+論理和と似た表現だが，`|`で繋いでも結果としては同じになる．
+
+```{r}
+stringr::str_detect(head(fruit), "[ac]")
+stringr::str_detect(head(fruit), "a|c")
+```
+
+行頭や行末を示す`^`や`$`，任意の文字`.`，文字列の0回以上や1回以上のの繰り返しの`*`や`+`などもある．
+
+```{r}
+stringr::str_detect(head(fruit), "^a")
+stringr::str_detect(head(fruit), "a$")
+stringr::str_detect(head(fruit), "a.*a")
+```
+
+正規表現には他にも色々とあって，使えると非常に便利である．
+もちろん，`str_detect()`以外のstringrの関数でも正規表現が使える．
+
+`str_replace()`と`str_replace_all()`は文字列の置換を行う．
+`str_replace()`は，検索で見つかった文字列の最初の1つだけ置換して，`str_replace_all()`は見つかった文字列を全て置換する．
+`str_remove()`と`str_remove_all()`は，検索で見つかった文字列を削除する．
+
+```{r}
+stringr::str_replace(fruit[1:4], "a", "A")
+stringr::str_replace_all(fruit[1:4], "a", "A")
+stringr::str_remove(fruit[1:4], "a")
+stringr::str_remove_all(fruit[1:4], "a")
+```
+
+
+`str_pad()`は文字数の長さを揃えるときに役立つ．
+文字列だけでなく，数字の桁揃えでも使える．
+
+```{r}
+stringr::str_pad(1:10, width = 2, pad = "0")
+```
+
+## purrrで繰り返し処理 {#purrr}
+
+プログラミングで繰り返し処理では，forやwhileでのループが基本である．
+ただし，パイプで繋いで処理していくときに，途中でforループを使うとコードが途切れてしまう．
+また，実行速度としてはあまり早くない．
+このような欠点を補うには，purrrの`map()`とその派生関数を使うとよい．
+
+`map()`は，第1引数にベクトルかリストを，第2引数に関数を指定する．
+関数の引数がある場合は，第2引数のうしろにに引数を追加する．
+`map()`はリストを返すが，doubleのベクトルを返したい場合は`map_dbl()`を使う．
+その他，文字列を返す`map_chr()`，論理値を返す`map_lgl()`，整数を返す`map_int()`などがある．
+
+以下では，100から10000個の乱数を生成し，標本誤差を求め，散布図を描画する．
+
+```{r, eval = FALSE}
+(1:100 * 100) %>%
+  purrr::map(rnorm) %>%
+  purrr::map_dbl(function(x){ sd(x) / sqrt(length(x)) }) %>%
+  plot()
+```
+
+zipファイルの一覧を取得して，全てのzipファイルを解凍するには以下のようにする．
+
+```{r, eval = FALSE}
+unzips <- 
+  fs::dir_ls(regex = "\\.zip") %>%
+  purrr::map_chr(unzip)
+```
+
+返り値として入力したものそのものが必要であれば，`walk()`を使う．
+
+```{r, eval = FALSE}
+zips <- 
+  fs::dir_ls(regex = "\\.zip") %>%
+  purrr::walk(unzip)
+```
+
+`map()`を拡張した関数として，ベクトルまたはリストの引数を2つとる`map2()`や，さらに多くの引数をしていしるために，データフレームを引数とする`pmap()`がある．
+
+科研費の審査委員一覧
+  2023-03-06 
+
+
+

@@ -13,7 +13,7 @@ rmd_files:
 - "assoc.Rmd"                 # 
 - "magrittr.Rmd"              # 
 - "tidyverse.Rmd"             # 
-- "stringr.Rmd"               # 
+  # - "stringr.Rmd"               # 
 - "lubridate.Rmd"             # 
 - "fs.Rmd"                    # 
 - "shell.Rmd"                 # 
@@ -25,8 +25,8 @@ rmd_files:
 - "rselenium.Rmd"             # 
 - "magick.Rmd"                # 
 - "dbi.Rmd"                   # 
-- "xlsx.Rmd"                  # 
-- "openxlsx.Rmd"              # 
+- "openxlsx.Rmd"                  # 
+  # - "xlsx.Rmd"                  # 
 - "qpdf.Rmd"                  # 
 - "RDCOMClient.Rmd"           # 
 - "microsoft365r.Rmd"         # 
