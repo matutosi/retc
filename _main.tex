@@ -122,7 +122,7 @@
 
 \title{Rにる作業の効率化・自動化 -パッケージ活用術-}
 \author{Toshikazu Masumura}
-\date{2023-07-01}
+\date{2023-07-02}
 
 \begin{document}
 \maketitle
@@ -1229,14 +1229,14 @@ int(整数)やchr(文字列)のように省略して表示されるので，若�
 \end{Shaded}
 
 \begin{verbatim}
-##            a          b          c          d          e           f          g
-## 1 -1.3135848  0.3258321  0.6286094  0.8868641  0.9018192  0.81154500 -0.1813681
-## 2  0.6630295 -0.1539541  0.5292270 -0.6665338 -1.0718088 -0.02525752  0.5337847
-## 3 -0.5375106  1.6347028 -0.2873361  0.3141193 -0.3897252  0.50563437  1.0686319
-##           h           i          j
-## 1 0.7282541 -0.03894795  1.0830392
-## 2 1.0519735  1.41976184 -0.0658578
-## 3 0.7313550  0.28444134  0.5333303
+##            a          b          c         d           e          f          g
+## 1 -0.6722054 -1.7549460 -0.3261451 -1.007983 -0.84256152  0.4051671 -0.7286582
+## 2 -0.7519786 -0.2083158  0.2276188  1.721721 -0.03485625  1.8018428 -0.5180391
+## 3  0.6254753 -0.5018236 -0.2119631  1.979444  1.04277411 -1.5034504  0.3827472
+##           h          i          j
+## 1 -1.064751  0.2552976 -0.5455716
+## 2 -1.148992 -0.2384466 -1.0080208
+## 3  1.094538  0.8296825 -0.1882529
 \end{verbatim}
 
 \begin{Shaded}
@@ -1247,11 +1247,11 @@ int(整数)やchr(文字列)のように省略して表示されるので，若�
 
 \begin{verbatim}
 ## # A tibble: 3 x 10
-##        a      b      c      d      e       f      g     h       i       j
-##    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>   <dbl>  <dbl> <dbl>   <dbl>   <dbl>
-## 1 -1.31   0.326  0.629  0.887  0.902  0.812  -0.181 0.728 -0.0389  1.08  
-## 2  0.663 -0.154  0.529 -0.667 -1.07  -0.0253  0.534 1.05   1.42   -0.0659
-## 3 -0.538  1.63  -0.287  0.314 -0.390  0.506   1.07  0.731  0.284   0.533
+##        a      b      c     d       e      f      g     h      i      j
+##    <dbl>  <dbl>  <dbl> <dbl>   <dbl>  <dbl>  <dbl> <dbl>  <dbl>  <dbl>
+## 1 -0.672 -1.75  -0.326 -1.01 -0.843   0.405 -0.729 -1.06  0.255 -0.546
+## 2 -0.752 -0.208  0.228  1.72 -0.0349  1.80  -0.518 -1.15 -0.238 -1.01 
+## 3  0.625 -0.502 -0.212  1.98  1.04   -1.50   0.383  1.09  0.830 -0.188
 \end{verbatim}
 
 変なたとえかもしれないが，データフレームは「言われたことをそのままやりました」という何も考えずに与えられたことをするような感じで，tibbleは「見やすく修正しておきました」という非常に気の利いた対応をする感じである．
@@ -1274,28 +1274,28 @@ tibbleではそれがない．
 \end{Shaded}
 
 \begin{verbatim}
-##              a           b           c
-## 1   0.35475882  0.98576502  1.85558063
-## 2  -1.33862666  0.95126894  0.05442413
-## 3   1.79033272  1.28345518  1.07043527
-## 4  -1.32753696 -0.62237492 -0.33573553
-## 5   0.82825839 -1.62273578 -1.72189442
-## 6  -0.67056908 -0.81137801 -2.06298575
-## 7   0.06586681  0.20062189  0.61980648
-## 8  -0.01837473  0.59613173 -0.27851550
-## 9  -0.91791524  0.74809545  0.74491957
-## 10  0.43831650  0.09698700  0.33147597
-## 11 -0.02769250 -0.53624010  0.39338219
-## 12  1.30365379 -1.04999801 -0.46493327
-## 13 -0.53412503 -0.18472232 -0.49193168
-## 14 -0.82126141  0.23557813 -1.31723148
-## 15 -1.57047874 -0.09585048 -2.05633368
-## 16 -0.59443837  0.14927487  1.43406228
-## 17 -0.52450623  1.61884642  0.13953113
-## 18 -0.73447200  1.19052003  0.22625906
-## 19  2.06498702  0.94910025  0.03473814
-## 20  1.37864372 -0.38184382 -0.65165730
-## 21 -1.07897837  0.33909166 -0.99833449
+##             a           b           c
+## 1   1.2551091 -0.16132572  0.95656653
+## 2   1.0464224 -1.04487924 -1.16062395
+## 3   0.4269016  2.46031031  1.60782097
+## 4  -0.5141161  0.42251657  1.75520883
+## 5  -0.0372936 -0.66167167 -0.20512023
+## 6  -1.7749062  0.48393439 -1.47284943
+## 7  -1.7440860  1.92897491 -1.80357869
+## 8   0.4820484 -0.31891612 -1.15450451
+## 9  -1.9894593  0.94950885  1.19484896
+## 10  2.0495603  2.04207522  0.81739170
+## 11 -0.2685465 -0.64770496  0.91185456
+## 12  1.2530493 -0.46421774 -0.90733408
+## 13  0.9092605  0.07932436  1.42985247
+## 14  0.6160408  0.81112777 -1.18312191
+## 15 -0.5062403 -0.42750737  0.67863892
+## 16 -1.1927361  0.10314127 -0.47249970
+## 17 -2.5676824 -0.12917357 -1.02374832
+## 18 -0.4363403 -0.85982810  0.01087197
+## 19 -0.2019548  0.19844355  0.49261626
+## 20 -0.5494198  0.29215004  0.90167758
+## 21 -0.2998408  2.66793936 -1.34622056
 \end{verbatim}
 
 \begin{Shaded}
@@ -1306,18 +1306,18 @@ tibbleではそれがない．
 
 \begin{verbatim}
 ## # A tibble: 21 x 3
-##          a       b       c
-##      <dbl>   <dbl>   <dbl>
-##  1  0.355   0.986   1.86  
-##  2 -1.34    0.951   0.0544
-##  3  1.79    1.28    1.07  
-##  4 -1.33   -0.622  -0.336 
-##  5  0.828  -1.62   -1.72  
-##  6 -0.671  -0.811  -2.06  
-##  7  0.0659  0.201   0.620 
-##  8 -0.0184  0.596  -0.279 
-##  9 -0.918   0.748   0.745 
-## 10  0.438   0.0970  0.331 
+##          a      b      c
+##      <dbl>  <dbl>  <dbl>
+##  1  1.26   -0.161  0.957
+##  2  1.05   -1.04  -1.16 
+##  3  0.427   2.46   1.61 
+##  4 -0.514   0.423  1.76 
+##  5 -0.0373 -0.662 -0.205
+##  6 -1.77    0.484 -1.47 
+##  7 -1.74    1.93  -1.80 
+##  8  0.482  -0.319 -1.15 
+##  9 -1.99    0.950  1.19 
+## 10  2.05    2.04   0.817
 ## # i 11 more rows
 \end{verbatim}
 
@@ -1386,17 +1386,17 @@ tibbleではそれがない．
 \end{Shaded}
 
 \begin{verbatim}
-##            x           y
-## 1  0.1261202 -0.80347905
-## 2  0.7561412 -0.13071244
-## 3  0.3664770  0.46063654
-## 4  0.5248840 -0.07983429
-## 5  0.2674338 -1.06597106
-## 6  0.6689906 -0.80087302
-## 7  0.2260104  1.45382159
-## 8  0.2267608  0.37950524
-## 9  0.6249113 -0.05418131
-## 10 0.7480237  0.24161916
+##             x           y
+## 1  0.22511454 -0.29821907
+## 2  0.95354840 -0.07754731
+## 3  0.04791683  0.22539948
+## 4  0.59440320 -0.15132023
+## 5  0.74209265 -3.01681966
+## 6  0.92884163 -0.84132258
+## 7  0.12976889  0.50365803
+## 8  0.05474290  1.72963206
+## 9  0.64795687  0.41358041
+## 10 0.40165451 -0.16069347
 \end{verbatim}
 
 \begin{Shaded}
@@ -1409,16 +1409,16 @@ tibbleではそれがない．
 ## # A tibble: 10 x 2
 ##        x       y
 ##    <dbl>   <dbl>
-##  1 0.359  0.584 
-##  2 0.617  0.0666
-##  3 0.548  0.764 
-##  4 0.406 -1.18  
-##  5 0.722  0.817 
-##  6 0.893 -0.540 
-##  7 0.828  2.08  
-##  8 0.462 -1.14  
-##  9 0.205 -1.78  
-## 10 0.476  0.686
+##  1 0.769 -1.55  
+##  2 0.789 -0.369 
+##  3 0.858 -2.02  
+##  4 0.613  0.969 
+##  5 0.176  0.888 
+##  6 0.637  0.0497
+##  7 0.869 -0.870 
+##  8 0.642  0.0597
+##  9 0.245 -0.749 
+## 10 0.378  0.778
 \end{verbatim}
 
 \hypertarget{tidyrux3067ux30c7ux30fcux30bfux3092ux6574ux5f62ux3059ux308b}{%
@@ -2129,13 +2129,102 @@ stringrでは主な関数は\texttt{str\_}で始まるようになっている�
 プログラミングで繰り返し処理では，forやwhileでのループが基本である．
 ただし，パイプで繋いで処理していくときに，途中でforループを使うとコードが途切れてしまう．
 また，実行速度としてはあまり早くない．
-このような欠点を補うには，パッケージpurrrの\texttt{map()}とその派生関数を使うとよい．
+このような欠点を補うには，purrrの\texttt{map()}とその派生関数を使うとよい．
+
+\texttt{map()}は，第1引数にベクトルかリストを，第2引数に関数を指定する．
+関数の引数がある場合は，第2引数のうしろにに引数を追加する．
+\texttt{map()}はリストを返すが，doubleのベクトルを返したい場合は\texttt{map\_dbl()}を使う．
+その他，文字列を返す\texttt{map\_chr()}，論理値を返す\texttt{map\_lgl()}，整数を返す\texttt{map\_int()}などがある．
+
+以下では，100から10000個の乱数を生成し，標本誤差を求め，散布図を描画する．
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{?map}
+\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100} \SpecialCharTok{*} \DecValTok{100}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  purrr}\SpecialCharTok{::}\FunctionTok{map}\NormalTok{(rnorm) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  purrr}\SpecialCharTok{::}\FunctionTok{map\_dbl}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x)\{ }\FunctionTok{sd}\NormalTok{(x) }\SpecialCharTok{/} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{length}\NormalTok{(x)) \}) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{plot}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
+
+\hypertarget{zipux30d5ux30a1ux30a4ux30ebux306eux89e3ux51cd}{%
+\subsubsection{zipファイルの解凍}\label{zipux30d5ux30a1ux30a4ux30ebux306eux89e3ux51cd}}
+
+zipファイルの一覧を取得して，全てのzipファイルを解凍するには以下のようにする．
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{unzips }\OtherTok{\textless{}{-}} 
+\NormalTok{  fs}\SpecialCharTok{::}\FunctionTok{dir\_ls}\NormalTok{(}\AttributeTok{regex =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.zip"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  purrr}\SpecialCharTok{::}\FunctionTok{map\_chr}\NormalTok{(unzip)}
+\end{Highlighting}
+\end{Shaded}
+
+返り値として入力したものそのものが必要であれば，\texttt{walk()}を使う．
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{zips }\OtherTok{\textless{}{-}} 
+\NormalTok{  fs}\SpecialCharTok{::}\FunctionTok{dir\_ls}\NormalTok{(}\AttributeTok{regex =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.zip"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  purrr}\SpecialCharTok{::}\FunctionTok{walk}\NormalTok{(unzip)}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{map()}を拡張した関数として，ベクトルまたはリストの引数を2つとる\texttt{map2()}や，さらに多くの引数をしていしるために，データフレームを引数とする\texttt{pmap()}がある．
+
+\hypertarget{ux79d1ux7814ux8cbbux306eux5be9ux67fbux59d4ux54e1ux306eux540dux7c3fux53d6ux5f97}{%
+\subsubsection{科研費の審査委員の名簿取得}\label{ux79d1ux7814ux8cbbux306eux5be9ux67fbux59d4ux54e1ux306eux540dux7c3fux53d6ux5f97}}
+
+科学研究費助成事業，いわゆる科研費の審査委員は何年後かに名簿が公開される．
+ただ，基盤Aなどの種目ごとで，さらに小委員会ごとというように，かなり細かい区分でPDFファイルが作成されている．
+特定の分野のみで1つか2つぐらいの審査委員を見るのなら手作業でも良いが，多くをダウンロードするなら自動化したい．
+
+個人的な経験だが，科研費でどの分野で応募するか(つまり審査委員による)，採否に大きく影響する．
+不採択で開示された審査結果でも「C」つまり採択されなかった中で下位50\%という申請書があったが，自分ではかなり頑張って作ったつもりだった．
+そこで，年度のみ変更して内容はほぼそのままで分野を変えて申請した．
+すると，採択されたことがあった．
+さすがにちょっとびっくりしたが，実際そのようなことがあるため，審査の分野はよく考えたほうが良い．
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{domain }\OtherTok{\textless{}{-}} \StringTok{"https://www.jsps.go.jp/j{-}grantsinaid/01\_seido/03\_shinsa/meibo/r02/"}
+\NormalTok{dir }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"wakate/w\_"}\NormalTok{, }\StringTok{"kiban\_b/b\_"}\NormalTok{, }\StringTok{"kiban\_c/c\_"}\NormalTok{)}
+\NormalTok{div }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"w\_"}\NormalTok{, }\StringTok{"b\_"}\NormalTok{, }\StringTok{"c\_"}\NormalTok{)}
+\NormalTok{file }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"01010"}\NormalTok{,}\StringTok{"01020"}\NormalTok{,}\StringTok{"01030"}\NormalTok{,}\StringTok{"01040"}\NormalTok{,}\StringTok{"01050"}\NormalTok{,}\StringTok{"01060"}\NormalTok{,}\StringTok{"01070"}\NormalTok{,}\StringTok{"01080"}\NormalTok{)}
+\NormalTok{reviewers }\OtherTok{\textless{}{-}}
+\NormalTok{  tidyr}\SpecialCharTok{::}\FunctionTok{expand\_grid}\NormalTok{(domain, dir, file) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{transmute}\NormalTok{(}\AttributeTok{url =} \FunctionTok{paste0}\NormalTok{(domain, dir, file, }\StringTok{".pdf"}\NormalTok{), }
+                   \AttributeTok{destfile =} \FunctionTok{paste0}\NormalTok{(fs}\SpecialCharTok{::}\FunctionTok{path\_temp}\NormalTok{(), }\StringTok{"/"}\NormalTok{, div, file, }\StringTok{".pdf"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{print}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pmap\_chr}\NormalTok{(curl}\SpecialCharTok{::}\NormalTok{curl\_download)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 24 x 2
+##    url                                                                  destfile
+##    <chr>                                                                <chr>   
+##  1 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/w~ C:/User~
+##  2 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/w~ C:/User~
+##  3 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/w~ C:/User~
+##  4 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/w~ C:/User~
+##  5 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/w~ C:/User~
+##  6 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/w~ C:/User~
+##  7 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/w~ C:/User~
+##  8 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/w~ C:/User~
+##  9 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/k~ C:/User~
+## 10 https://www.jsps.go.jp/j-grantsinaid/01_seido/03_shinsa/meibo/r02/k~ C:/User~
+## # i 14 more rows
+\end{verbatim}
+
+審査委員の名簿ファイル名の規則さえ分かれば，ダウンロードはRにお任せできる．
+分野は実はもっと多くあるがここでは8つだけに絞っている．
+
+ダウンロードしたファイル自体がたくさんあるので，まだまだ不便な状態ではある．
+データとして使えるようにするには，PDFからテキストを抽出したり，その中身をデータフレーム形式の一覧にしたりという作業が必要である．
+そのあたりのコードは，本書のqpdfのページや以下を参考にして欲しい．
+
+\url{https://gist.github.com/matutosi/82a61628920ab476b71c46b980b97d24}
 
 \hypertarget{lubridate}{%
 \section{lubridateで日付・時刻を扱う}\label{lubridate}}
@@ -2184,7 +2273,7 @@ lubridateを活用すると簡単に計算できる．
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "2023-07-01" "2024-07-01" "2025-07-01" "2026-07-01" "2027-07-01"
+## [1] "2023-07-02" "2024-07-02" "2025-07-02" "2026-07-02" "2027-07-02"
 \end{verbatim}
 
 \begin{Shaded}
@@ -2194,7 +2283,7 @@ lubridateを活用すると簡単に計算できる．
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "2023-07-01" "2024-06-30" "2025-06-30" "2026-06-30" "2027-06-30"
+## [1] "2023-07-02" "2024-07-01" "2025-07-01" "2026-07-01" "2027-07-01"
 \end{verbatim}
 
 \begin{Shaded}
@@ -2204,7 +2293,7 @@ lubridateを活用すると簡単に計算できる．
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "2023-07-01" "2023-08-01" "2023-09-01" "2023-10-01" "2023-11-01"
+## [1] "2023-07-02" "2023-08-02" "2023-09-02" "2023-10-02" "2023-11-02"
 \end{verbatim}
 
 \begin{Shaded}
@@ -2214,7 +2303,7 @@ lubridateを活用すると簡単に計算できる．
 \end{Shaded}
 
 \begin{verbatim}
-## [1] "2023-07-01" "2023-08-01" "2023-09-01" "2023-10-01" "2023-11-01"
+## [1] "2023-07-02" "2023-08-02" "2023-09-02" "2023-10-02" "2023-11-02"
 \end{verbatim}
 
 なお，\texttt{today()}はそのときの本日の日付を返す関数のため，上記の表示と読者が実行したときの表示は異なるはずである．
@@ -2312,7 +2401,7 @@ lubridateを活用すると簡単に計算できる．
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 7
+## [1] 1
 \end{verbatim}
 
 \begin{Shaded}
@@ -2322,7 +2411,7 @@ lubridateを活用すると簡単に計算できる．
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 土
+## [1] 日
 ## Levels: 日 < 月 < 火 < 水 < 木 < 金 < 土
 \end{verbatim}
 
@@ -3121,7 +3210,7 @@ new_path <-
 ##     shortcut <- stringr::str_remove_all_all(shortcut, "\"")
 ##     return(list(shortcut = shortcut, res = res))
 ## }
-## <bytecode: 0x000001e5c30f5ba0>
+## <bytecode: 0x0000024f1f0bec18>
 ## <environment: namespace:automater>
 \end{verbatim}
 
@@ -3141,7 +3230,7 @@ new_path <-
 ##         path)
 ##     shell(cmd, intern = TRUE)
 ## }
-## <bytecode: 0x000001e5c31963b8>
+## <bytecode: 0x0000024f1f169280>
 ## <environment: namespace:automater>
 \end{verbatim}
 
@@ -3626,7 +3715,7 @@ automaterパッケージの\texttt{find\_python()}を使用すると，楽に指
 ##     }
 ##     return(python_path[choice])
 ## }
-## <bytecode: 0x000001d529c92b28>
+## <bytecode: 0x000001f163017bc8>
 ## <environment: namespace:automater>
 \end{verbatim}
 
@@ -3700,7 +3789,7 @@ USBの取り外しの関数を作成するときには，タスクバーとRウ�
 ##     }
 ##     return(list(x = unlist(x), y = unlist(y)))
 ## }
-## <bytecode: 0x000001d528249a30>
+## <bytecode: 0x000001f16138b740>
 ## <environment: namespace:automater>
 \end{verbatim}
 
@@ -3821,7 +3910,7 @@ Pythonでライブラリが大文字を含んでいても，呼び出すとき�
 \end{Shaded}
 
 \begin{verbatim}
-## C:/Users/matu/AppData/Local/Temp/RtmpSWbLPu/screenshot.png
+## C:/Users/matu/AppData/Local/Temp/RtmpofIptG/screenshot.png
 \end{verbatim}
 
 コードを実行すると，一時ディレクトリにpng形式の画像が保存される．
@@ -5920,7 +6009,7 @@ pdf\_compress()は圧縮や最適化(Linealize)をしてくれる．
 ##     file.remove(out[pages_body])
 ##     return(outfile)
 ## }
-## <bytecode: 0x0000022ef26aaab0>
+## <bytecode: 0x00000196a1329288>
 ## <environment: namespace:automater>
 \end{verbatim}
 
@@ -6111,7 +6200,7 @@ CRANには登録されておらず，ウェブページかGitHubからインス�
 ##     doc$close()
 ##     return(invisible(converted))
 ## }
-## <bytecode: 0x00000165a599ee78>
+## <bytecode: 0x00000130114e9d38>
 ## <environment: namespace:automater>
 \end{verbatim}
 
