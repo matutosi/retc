@@ -17,29 +17,61 @@ readxlパッケージを使えば簡単にデータの読み書きができる�
 
 ## 準備
 
-まずは，パッケージをCRANからインストールして，呼び出しておく．
-
+まずは，パッケージをCRANからインストールする．
 
 ```{r, eval = FALSE}
 install.package("openxlsx")
+install.package("pivotea")
 ```
+
+手前味噌で申し訳ないが，pivoteaパッケージの関数`pivot()`と`hogwarts`というデータを使用する．
+`pivot()`は，tidyrの`pivot_wider()`のラッパー関数で，エクセルのピボットテーブルのような表を簡単に作れるようにしたものである．
+このデータは，以下のULRからホグワーツ魔法魔術学校の時間割データを入手して整形した．
+
+https://github.com/Arcfej/HogwartsTimetable/raw/master/GeneratedTimetable.xlsx
+
 
 ```{r, message = FALSE}
 library(tidyverse)
 library(openxlsx)
-  # remotes::install_github("matutosi/pivotea")
 library(pivotea)
 data(hogwarts)
+hogwarts
+```
 
 
+`pivot()`では，行・列・値(`row`, `col`, `value`)に配置したい列名を文字列と指定し，さらに分割したい場合は`split`を指定する．
+なお，それぞれの引数には複数の列名を指定できる．
+ここでは，行(縦方向，エクセルの行ラベル)に`grade`(学年)と`hour`(時間)を配置し，列(横方向，列ラベル)には`wday`(曜日)，値(Σ値)には`subject`(科目)と`teacher`(教員)を指定し，house`(寮)で分割する．
+余談だが，Gはグリフィンドール，Hはハッフルパフ，Rはレイブンクロー，はSはスリザリンで，Aumaticは全house共通の時間割である．
+
+```{r}
 timetable <- 
   hogwarts %>%
-  pivot(row = c("grade", "hour"), col = "wday", value = c("subject", "teacher"), split = "house")
+  pivot(row = c("grade", "hour"), col = "wday", value = c("subject", "teacher"), split = "house") %>%
+  print()
+```
 
+得られた`timetable`は`house`で分割したlistで，その中身はdataframeである．
+このような分割されたデータフレームを`write.xlsx()`で保存すると，シートごとにデータを保存してくれる．
+非常に便利な関数である．
 
+```{r}
 tmp <- fs::file_temp(ext = "xlsx")
 openxlsx::write.xlsx(timetable, tmp)
+```
+
+
+エクセルのワークブックは，`loadWorkbook()`で読み込める．
+読み込んだワークブックの各シートのデータは`readWorkbook()`で取得できる．
+sheetにはシート番号を整数，あるいはシート名を文字列で指定する．
+また，シート名は`sheets()`でも取得可能である．
+
+```{r}
 wb <- openxlsx::loadWorkbook(tmp)
+wb
+openxlsx::readWorkbook(wb, sheet = 1)
+openxlsx::sheets(wb)
 ```
 
 <img src="img/openxlsx_01.png" width="70%">
@@ -59,7 +91,7 @@ openxlsxでは，`setColWidths()`で列幅の変更，`addFilter()`でオート�
 最後に，`saveWorkbook()`でワークブックを保存する．
 
 ```{r}
-for(sheet in sheets(wb)){
+for(sheet in openxlsx::sheets(wb)){
   df <- openxlsx::readWorkbook(wb, sheet)
   openxlsx::setColWidths(wb, sheet, cols = 1:ncol(df), width =  "auto")
   openxlsx::addFilter(wb, sheet, row = 1, cols = 1:ncol(df))
