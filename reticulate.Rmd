@@ -2,7 +2,9 @@
 
 RとPythonのパッケージは，相互に移植されていることが多い．
 例えば，Pythonのlogging(とRのfutile.logger)をもとにRのパッケージloggerは開発されている．
+
 https://cran.r-project.org/web/packages/logger/index.html
+
 また，Rのggplot2やdplyrはPythonにも移植されている．
 
 ただし，どちらか片方でしか利用できなかったり，使用方法が難しいことがある．
