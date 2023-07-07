@@ -213,6 +213,15 @@ Windowsの「ファイル名を指定して実行」の代わりとして，Mac�
 例えば，RStudioのショートカットをパスの通った`C:\Windows\System32`(システムファイルがあるので，パスが通っているはず)に"rst"という名前で保存すると(管理者権限が必要)，[Win] + [R]に続けて"rst"と入力するとRStudioを起動できる．
 他のディレクトリにショートカットを保存する場合は，そのディレクトリにパスを通しておく．
 
+```{r, echo = FALSE, eval = FALSE}
+pngs <- paste0("D:/matu/work/ToDo/retc/img/shell_0", 1, ".png")
+pngs_crop <- paste0("D:/matu/work/ToDo/retc/img/shell_crop_0", 1, ".png")
+magick::image_read(pngs) %>%
+  automater::magick_crop(c(5,5), c(455,265)) %>%
+  as.list() %>%
+  purrr::map2_chr(., pngs_crop, magick::image_write)
+```
+
 上記のショートカットの作成やパスを通す作業はそれぞれ1回だけなのでマウスでの手作業でも全く問題ない．
 でもせっかくなので，ここではRからショートカットを作成する．
 もともとパスの通っている`C:\Windows\System32`にショートカットを作っても良いのだが，管理者権限が必要なためRからの操作が難しい．
@@ -247,6 +256,7 @@ new_path <-
 
 これで，[Win] + [R]で出てきた「ファイル名を指定して実行」に"rst"を入力すればRStudio，"r"を入力すればRが起動する．
 
+![](img/shell_crop_01.png){ width=30% }
 
 なお，`automater::make_shortcut`と`automater::add_path`の中身は以下のとおりである．
 独自で関数を作成する際の参考になれば幸いである．
