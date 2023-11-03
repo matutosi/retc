@@ -92,7 +92,7 @@ en <-
   `$`("jp") %>%
   print() %>%
   purrr::map_chr(deeplr::translate2, 
-    target_lang = "EN", source_lang = "JP", auth_key = "your_api_key") %>%
+    target_lang = "EN", auth_key = "your_api_key") %>%
   print()
 
 ## [1] "誰でもそうだろうが，面倒くさい仕事はしたくない．"
@@ -117,7 +117,7 @@ en <-
 ```{r, eval = FALSE}
 translated <- 
   dplyr::mutate(text, en = deeplr::translate2(jp, 
-    target_lang = "EN", source_lang = "JP", auth_key = "your_api_key") %>%
+    target_lang = "EN", auth_key = "your_api_key") %>%
   dplyr::relocate(en, jp) %>%
   print()
 ## # A tibble: 6 × 2
