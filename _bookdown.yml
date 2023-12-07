@@ -6,33 +6,31 @@ language:
 
 rmd_files:
 - "index.Rmd"
-
-- "r.Rmd"                     # 
-- "install.Rmd"               # 
-- "package.Rmd"               # 
-- "assoc.Rmd"                 # 
-- "magrittr.Rmd"              # 
-- "tidyverse.Rmd"             # 
-  # - "stringr.Rmd"               # 
-- "lubridate.Rmd"             # 
-- "fs.Rmd"                    # 
-- "shell.Rmd"                 # 
-- "deeplr.Rmd"                # 
-- "reticulate.Rmd"            # 
-- "keyboardsimulator.Rmd"     # 
-- "ggplot2.Rmd"               # 
-- "rvest.Rmd"                 # 
-- "rselenium.Rmd"             # 
-- "magick.Rmd"                # 
-- "dbi.Rmd"                   # 
-- "openxlsx.Rmd"                  # 
-  # - "xlsx.Rmd"                  # 
-- "qpdf.Rmd"                  # 
-- "RDCOMClient.Rmd"           # 
-- "microsoft365r.Rmd"         # 
-- "officer.Rmd"               # 
-  # - pkg.Rmd                     # 
-  # - authors_note.Rmd            # 
-
-  # fs::dir_ls(regexp = "Rmd")
-  # - "rvest_amazon.Rmd"      # 
+- "r.Rmd"                      # 
+- "install.Rmd"                # 
+- "package.Rmd"                # 
+- "assoc.Rmd"                  # 
+- "magrittr.Rmd"               # 
+- "tidyverse.Rmd"              # 
+  # - "stringr.Rmd"            # 
+- "lubridate.Rmd"              # 
+- "fs.Rmd"                     # 
+- "shell.Rmd"                  # 
+- "deeplr.Rmd"                 # 
+- "reticulate.Rmd"             # 
+- "keyboardsimulator.Rmd"      # 
+- "ggplot2.Rmd"                # 
+- "rvest.Rmd"                  # 
+- "rselenium.Rmd"              # 
+- "magick.Rmd"                 # 
+- "dbi.Rmd"                    # 
+- "openxlsx.Rmd"               # 
+  # - "xlsx.Rmd"               # 
+- "qpdf.Rmd"                   # 
+- "RDCOMClient.Rmd"            # 
+- "microsoft365r.Rmd"          # 
+- "officer.Rmd"                # 
+  # - pkg.Rmd                  # 
+  # - authors_note.Rmd         # 
+  # fs::dir_ls(regexp = "Rmd") # 
+  # - "rvest_amazon.Rmd"       # 
