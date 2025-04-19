@@ -34,3 +34,7 @@ rmd_files:
   # - authors_note.Rmd         # 
   # fs::dir_ls(regexp = "Rmd") # 
   # - "rvest_amazon.Rmd"       # 
+
+- kakenhi.Rmd
+- scholar.Rmd
+- enq.Rmd
