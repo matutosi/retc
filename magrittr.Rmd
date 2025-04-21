@@ -270,7 +270,6 @@ divide_by    # `/`
 add(1:10, 100)
 ```
 
-
 論理演算で使う関数もパイプで使うと読みやすくなりそう．
 
 ```{r eval = FALSE}
@@ -288,4 +287,3 @@ rep(c(TRUE, FALSE), times = 5) %>%
 rep(c(TRUE, FALSE), times = 5) %>%
   or(rep(c(TRUE, FALSE), each = 5))
 ```
-
