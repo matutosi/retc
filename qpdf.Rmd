@@ -209,7 +209,7 @@ user_input <- function(prompt){
   }
 }
 
-files <- fs::dir_ls(regexp = "\\.pdf")
+files <- fs::dir_ls(regexp = "\\.pdf$")
 input <- input_files(files)
 input
 
@@ -225,7 +225,7 @@ automater::message_to_continue()
 入力する番号が数個であれば，これでも良いがもっと多くのファイルになった場合は現実的には使いにくい．
 多くのファイルを結合する場合は，以下のような方法で実装すると良いだろう．
 
-- `fs::dir_ls(regexp = "\\.pdf")`でファイル名の一覧を入手   
+- `fs::dir_ls(regexp = "\\.pdf$")`でファイル名の一覧を入手   
 - 一覧をもとに1行ごとに1つのファイル名のテキストファイルとして保存   
 - テキストファイルをユーザが並び替える(Rでは並び替えが終わるまで待機)   
 - 並び替えが終われば，RでEnter(他のキーでもOK)を入力   
