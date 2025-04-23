@@ -84,3 +84,119 @@ rem$excute(script)
 動的なサイトの場合は，HTMLの構成中の可能性もある．
 ログイン等のページでも，遷移途中のことがある．
 
+
+# Rseleniumでスクレイピング {#rselenium}
+
+```{r, echo = FALSE, eval = FALSE}
+  # 
+  # RSeleniumあ必要だと思っていたけど，
+  #   rvest::read_html_live()で色々できるかもしれない
+  #   ただし，2024-04-01時点では，エラーが出てくる．
+  # hadleyによると，それほどむつかしい問題ではなさそうとのこと
+  #   https://github.com/tidyverse/rvest/issues/405
+  # なので，しばらく待っておいて，エラーが解消されるなら，rvestでいく
+  # 2024-05になっても，だめなら，RSeleniumで書くことを考える
+  # 
+  # 
+  # 読者視点でのリード文を書く
+  #   日常業務での面倒なことなど
+```
+
+Seleniumは，ブラウザを使って動的に巡回しつつ，スクレイピングをするのに適している．
+
+JavascriptやPHPなどを使って，動的に作成されるサイトでは，URLだけではページを特定することはできない．
+そのため，rvestだけではデータを取得するのが困難である．
+
+## 動的サイトのスクレイピング
+
+```{r, eval = FALSE}
+  # アメリカの郵便番号はうまくいく
+  # install.packages("chromote")
+library(rvest)
+library(chromote)
+library(tidyverse)
+url <- "https://www.fcc.gov/media/engineering/dtvmaps"
+html <- read_html_live(url)
+zip <- "30308"
+html$type("#startpoint", zip)
+html$click("#btnSub")
+html$view()
+
+html |> 
+  html_table()
+
+
+  # https://rvest.tidyverse.org/reference/LiveHTML.html
+  # https://walkintheforest.net/r-rvest/
+  # https://uchidamizuki.quarto.pub/blog/posts/2024/02/scraping-dynamic-sites-with-rvest.html
+url <- "https://news.google.com/"
+polite::bow(url)
+
+  # scholar
+url <- "https://scholar.google.co.jp/"
+  # polite::bow(url)：OK
+html <- read_html_live(url)
+html$view()
+html$type("#gs_hdr_tsi", "松村俊和")
+html$click("#gs_hdr_tsb")
+html$html_elements("a")
+
+
+  # 郵便番号一覧の取得
+  #   やっぱりあかん
+library(rvest)
+url <- "https://www.post.japanpost.jp/zipcode/"
+  # polite::bow(url)：OK
+html <- read_html_live(url)
+zip <- "6580001"
+html$type('[name="zip"]', zip)
+html$click(".slim.sizeFull.btnTab")
+html$view()
+  # html |> html_table()
+
+  # 国会図書館
+  # ここもだめ
+url <- "https://www.ndl.go.jp/"
+  # polite::bow(url)：OK
+html <- read_html_live(url)
+html$type("#ndlsearchbox_top", "松村俊和")
+  # クリックが効かない
+html$click("#key_visual > div > div.kv_search_box.sp-none > div > form > div > input")
+  # html$html_elements("#key_visual > div > div.kv_search_box.sp-none > div > form > div > input")
+html$view()
+
+
+  # 価格.com    https://qiita.com/kusano_t/items/3eda71e86d0835e460fc
+  # ここもだめ
+url <- "https://kakaku.com/"
+  # polite::bow(url)：OK
+html <- read_html_live(url)
+html$type("#query", "rtx4060")
+html$click("#main_search_button")
+html$view()
+html$html_elements("a")
+
+
+  # 森北出版(途中までしかだめ)
+library(rvest)
+url <- "https://www.morikita.co.jp/"
+html <- read_html_live(url)
+  # html$view()
+  # html$html_elements("a")
+html$click(".modalWindow")
+html$type("#keywords_modal", "ロケット")
+  # html$html_elements(".btn._sizeM._colorMain")
+html$click(".btn._sizeM._colorMain")
+  # 検索まではできるが，その次が動かない
+  # html$view()
+  # html$html_elements("a")
+html$type("#author", "テスト")
+html$scroll_by(top = 200, left = 0)
+
+  # googleはうまくいかない：変換予測が働くため?
+url <- "https://google.co.jp/"
+html <- read_html_live(url)
+html$type('[name="q"]', "rvest")
+html$click('name="btnK"')
+html$view()
+```
