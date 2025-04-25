@@ -1,0 +1,27 @@
+\newpage
+
+```{r eval = FALSE}
+
+  # RSelenium
+
+  # 以下は，JSで応募情報入力を，ちょっとだけ自動化する方法
+  #   以下のURLで実行可能だが，ちょっとだけなので，あまり意味ない?
+  #   D:\matu\work\ToDo\rauto\html\kakenhi.html
+  #   // 科研費
+function getElementByNameSetValue(name, val){
+  document.getElementsByName(name)[0].value = val;
+}
+
+  #   // 原因は不明だが，応募などoptionのものから入れないと，エラーになる
+getElementByNameSetValue("shinseiDataInfo.shinseiFlgNo", "1"); // 1:応募する, 2:応募しない
+getElementByNameSetValue("shinseiDataInfo.kadaiNoKeizoku", "shinseiDataInfo.kadaiNoKeizoku");
+getElementByNameSetValue("shinseiDataInfo.kadaiNoSaisyu", "shinseiDataInfo.kadaiNoSaisyu");
+getElementByNameSetValue("shinseiDataInfo.kadaiInfo.bunkaSaimokuCd", "shinseiDataInfo.kadaiInfo.bunkaSaimokuCd");
+getElementByNameSetValue("shinseiDataInfo.kadaiInfo.kadaiNameKanji", "shinseiDataInfo.kadaiInfo.kadaiNameKanji");
+getElementByNameSetValue("shinseiDataInfo.kaijikiboFlgNo", "1"); // 1:開示希望
+getElementByNameSetValue("shinseiDataInfo.kenkyuSoshikiInfoList[0].gakui", "shinseiDataInfo.kenkyuSoshikiInfoList[0].gakui")
+getElementByNameSetValue("shinseiDataInfo.kenkyuSoshikiInfoList[0].buntan", "shinseiDataInfo.kenkyuSoshikiInfoList[0].buntan")
+getElementByNameSetValue("shinseiDataInfo.kenkyuSoshikiInfoList[0].keihi", "shinseiDataInfo.kenkyuSoshikiInfoList[0].keihi")
+getElementByNameSetValue("shinseiDataInfo.kenkyuSoshikiInfoList[0].effort", "shinseiDataInfo.kenkyuSoshikiInfoList[0].effort")
+
+```
