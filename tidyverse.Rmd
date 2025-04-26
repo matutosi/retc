@@ -125,7 +125,7 @@ tidyデータとは，次の4つを満たすもので，データベースの第
 3 1つのタイプの観測群が1つの表を構成する   
 4 1つの値が1つのセルを構成する   
 
-例えば，次のデータ`household`は非整然(messy，tidyの対義語)データの典型的な例である．
+例えば，次のデータ`relig_income`は非整然(messy，tidyの対義語)データの典型的な例である．
 
 ```{r}
 relig_income
@@ -171,8 +171,26 @@ https://tidyr.tidyverse.org/
 
 
 <!--
-`family`，`dob_child1`，`dob_child2`，`name_child1`，`name_child2`という5つの列がある．
-家族番号，1人目と2人目の子どもの誕生日，1人目と2人目の子どもの名前である．
+
+
+例えば，次のデータ`household`は非整然(messy，tidyの対義語)データの典型的な例です．
+`family`，`dob_child1`，`dob_child2`，`name_child1`，`name_child2`という5つの列があります．
+家族番号，1人目と2人目の子どもの誕生日，1人目と2人目の子どもの名前です．
+
+```{r tidyverse-tidyr-household, subject = 'household', caption = '非整然データの例'}
+household
+```
+
+```{r tidyverse-tidyr-household, subject = 'household', caption = household %>% 
+  pivot_longer(cols = starts_with("dob"), names_to = "item1", values_to = "birthday") %>%
+  pivot_longer(cols = starts_with("name"), names_to = "item2", values_to = "name") %>%
+  separate(item1, into = c(NA, "child")) %>%
+  separate(item2, into = c(NA, "nm_child")) %>%
+  dplyr::filter(child == nm_child) %>%
+  dplyr::select(!nm_child) %>%
+  drop_na()
+```
+
 ```{r}
 household %>% 
   pivot_longer(
@@ -182,6 +200,7 @@ household %>%
     values_drop_na = TRUE
   )
 ```
+
 -->
 
 <!--

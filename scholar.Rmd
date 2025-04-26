@@ -1,0 +1,381 @@
+\newpage
+
+```{r setup, include = FALSE, purl = FALSE}
+source("common.R")
+```
+
+# 論文検索
+
+7月下旬から9月にかけて夏休みという大学が多いだろう．
+大学教員にとっての夏休みは，授業機関よりは研究に集中できる期間である．
+とはいいながら，100%を研究に使えるわけではなく，大学の運営やその他の業務もしている．
+
+また，研究関連ではあるものの直接的な研究活動でない仕事もある．
+例えば，助成金の申請書類作成だ．
+多くの研究者にとって科学研究費助成事業(以下では，科研費とする)が重要なものである．
+科研費の申請は以前は10月だったが，徐々に締切が早くなって2023年では9月になった．
+採択(あるいは不採択)の通知が早く来るのは嬉しいが，その分準備も早くしなければならない．
+つまり，夏休みのうちに申請書を作成しなければならない．
+
+申請書の内容で重要なのは，研究計画である．
+研究計画では，既存の研究をまとめ，現時点での課題と仮説をまとめ，それに対する取り組みを分かりやすく説明する．
+そのためには，既存の研究を把握するには文献検索をする．
+GoogleSholarが非常に便利ではあるものの，
+
+また，科研費の現状を調べる上では，既に採択された科研費の概要を知っておいたり，科研費の審査者について知っておくことも重要である．
+
+ブラウザを使って手作業で実行しても良いが，結構な時間と手間がかかる．
+ここではスクレイピングという手法を使うことで，手作業でブラウザを操作するよりも効率的な情報収集を目指す．
+なお，スクレイピングとは擦り取る・かき集めることで，ネットの情報をかき集めることを意味している．
+
+Rでスクレイピングする方法には大きく分けて2つある．
+1つ目は主にrvestというパッケージで直接HTLMを取得する方法，
+2つ目はRSeleniumというパッケージでブラウザを自動的に操作しつつrvestを使ってHTMLを取得する方法である．
+主にrvestだけを使う方法で完結できればそれに越したことはないが，ウエブサイトの構成によってはRSeleniumでブラウザを自動的に操作しなければならない．
+
+　
+
+## 準備
+
+
+<!--
+RSelenium
+  # D:/matu/work/ToDo/kwu/R/cs_loop_record.R
+-->
+
+<!--
+```{r}
+install.packages("package:scholar")
+library(scholar)
+```
+-->
+
+
+
+　
+
+## rvestで文献収集
+
+```{r}
+  # https://gist.github.com/matutosi/9228b3c084185843279c973f106aa195
+
+#' Search Google Scholar
+#'
+#' This function searches for a given text on Google Scholar and returns the
+#' search results.
+#'
+#' @param text A character string to search for on Google Scholar.
+#' @return A list of search results. 
+#'         The first element in the list (index 1: not a scholar data) is removed. 
+#' @note The function assumes the search form is the second form on the Google Scholar
+#' homepage. If the structure of the website changes in the future, the function
+#' might not work as expected.
+#'
+#' @examples
+#' \dontrun{
+#' resp <- search_scholar("vegetation of paddy fileds")
+#' title <- extract_titles(resp)
+#' link  <- extract_links(resp)
+#' pdf   <- extract_pdfs(resp)
+#' tibble::tibble(title, link, pdf)
+#' 
+#' # Open browser on windows
+#' paste0("start ", link) %>%         # Journal
+#'   purrr::map(shell)
+#' paste0("start ", na.omit(pdf)) %>% # PDF
+#'   purrr::map(shell)
+#' 
+#' # Open browser on Mac or Linux
+#' paste0("open ", link) %>%         # Journal
+#'   purrr::map(shell)
+#' paste0("open ", na.omit(pdf)) %>% # PDF
+#'   purrr::map(shell)
+#' }
+#' @export
+search_scholar <- function(text){
+  scholar <- rvest::read_html("https://scholar.google.com/")
+  form <- 
+    rvest::html_form(scholar)[[2]] %>%
+    rvest::html_form_set(q = text)
+  resp <- 
+    rvest::html_form_submit(form) %>%
+    rvest::read_html() %>%
+    rvest::html_elements(".gs_scl")
+  resp[[1]] <- NULL
+  return(resp)
+}
+
+#' Extract Text from HTML Nodes by Class Name
+#'
+#' Given a list of HTML nodes and a class name, this function extracts 
+#' the corresponding text from the HTML nodes.
+#'
+#' @param x          A list of HTML nodes.
+#' @param class_name A character string specifying the class name of the desired HTML elements.
+#'
+#' @return A character vector containing the extracted texts.
+#' @export
+extract_scholar_text <- function(x, class_name){
+  texts <- list()
+  for(i in seq_along(x)){
+    texts[[i]] <- 
+      rvest::html_elements(x[[i]], class_name) %>%
+      rvest::html_text()
+  }
+  return(unlist(texts))
+}
+
+#' Extract HTML Element Attributes
+#'
+#' Given a list of HTML nodes, a class name, a node, and an attribute name, this function 
+#' extracts the corresponding attribute from the HTML elements.
+#'
+#' @param x          A list of HTML nodes.
+#' @param class_name A character string specifying the class name of the desired HTML elements.
+#' @param node       A character string specifying the node to be selected within the class.
+#' @param attr       A character string specifying the attribute name to be extracted.
+#'
+#' @return A character vector containing the extracted attributes.
+#' @export
+extract_scholar_element <- function(x, class_name, node, attr){
+  elements <- list()
+  for(i in seq_along(x)){
+    elements[[i]] <- 
+      rvest::html_elements(x[[i]], class_name) %>%
+      rvest::html_nodes(node) %>%
+      rvest::html_attr(attr)%>%
+      `[`(1)
+  }
+  return(unlist(elements))
+}
+
+#' Wrapper function to exetract titles from Google Scholar 
+#' 
+#' This function uses the `extract_scholar_text` function to extract titles 
+#' from a list of Google Scholar search results.
+#'
+#' @param x   A list of HTML nodes corresponding to Google Scholar search results.
+#' @return    A character vector containing the titles extracted from the search results.
+#' @export
+extract_titles <- function(x){
+  extract_scholar_text(x, class_name = ".gs_rt")
+}
+
+#' Wrapper function to exetract links to journal from Google Scholar 
+#' 
+#' This function uses the `extract_scholar_text` function to extract titles 
+#' from a list of Google Scholar search results.
+#'
+#' @param x   A list of HTML nodes corresponding to Google Scholar search results.
+#' @return    A character vector containing the titles extracted from the search results.
+#' @export
+extract_links <- function(x){
+  extract_scholar_element(x, class_name = ".gs_rt", node = "a", attr = "href")
+}
+
+#' Wrapper function to exetract links to PDF from Google Scholar 
+#' 
+#' This function uses the `extract_scholar_text` function to extract titles 
+#' from a list of Google Scholar search results.
+#'
+#' @param x   A list of HTML nodes corresponding to Google Scholar search results.
+#' @return    A character vector containing the titles extracted from the search results.
+#' @export
+extract_pdfs <- function(x){
+  extract_scholar_element(x, class_name = ".gs_or_ggsm", node = "a", attr = "href")
+}
+
+```
+
+
+
+```{r}
+
+```
+
+　
+
+## RSeleniumで文献情報の取得
+
+文献収集はrvestで可能であるものの，その文献の著者名や雑誌名などの文献情報はrvestでは取得できない．
+そのようなときは，ブラウザを自動的に操作する．
+
+ブラウザの自動的に操作するには，以下の作業が必要である．
+- Javaのインストール
+- Seleniumという自動化ツールのインストール
+- ブラウザのドライバの取得
+
+  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #  # 
+  # 
+  # NEED install Selenium and GoogleChrome driver
+  # 
+  #   Selenium ( < 4.0)
+  #     https://www.selenium.dev/downloads/
+  #       Download .jar file (selenium-server-standalone-3.xxx.xx) and save in any directory
+  #        (ex.) https://github.com/SeleniumHQ/selenium/releases/download/selenium-3.141.59/selenium-server-standalone-3.141.59.jar
+  #   GoogleChrome driver
+  #     https://sites.google.com/chromium.org/driver/
+  #     https://googlechromelabs.github.io/chrome-for-testing/#stable
+  #       Download driver with the same version of your chrome
+  #       Save driver to the same directory with .jar file (selenium-server-standalone-3.xxx.xx)
+  # 
+
+Seleniumは2023年9月では4.12までバージョンが上がっているが，Rからはバージョン4は使えないので，バージョン3をインストールする．
+GoogleChromeブラウザのドライバをダウンロードして，Seleniumをインストールしたのと同じフォルダに保存する．
+
+RからSeleniumを使うには，RSeleniumというRのパッケージが必要である．
+これは，いつものようにCRANからインストールできる．
+
+```{r}
+install.packages("RSelenium")
+library(RSelenium)
+```
+
+　
+
+## 
+
+```{r, ecoho = False, subject = '()', caption = ''}
+selenium <- "d:/pf/selenium/selenium-server-standalone-3.141.59.jar"
+cmd <- paste0("start java -jar ", selenium)
+shell(cmd)
+```
+
+Seleniumでスクレイピングする前に，Seleniumを起動する．
+一般的にはコマンドラインから起動するのだが，Rから起動できるようにしておく．
+
+```{r, eval = False, subject = '()', caption = ''}
+selenium <- "PATH_TO_SELENIUM"
+cmd <- paste0("start java -jar ", selenium)
+shell(cmd)
+```
+
+Seleinumの起動に成功すると，別ウィンドウで以下のような表示がされる．
+
+```{eval = False}
+07:03:16.799 INFO [GridLauncherV3.parse] - Selenium server version: 3.141.59, revision: e82be7d358
+07:03:16.939 INFO [GridLauncherV3.lambda$buildLaunchers$3] - Launching a standalone Selenium Server on port 4444
+2023-09-24 07:03:17.019:INFO::main: Logging initialized @784ms to org.seleniumhq.jetty9.util.log.StdErrLog
+07:03:17.336 INFO [WebDriverServlet.<init>] - Initialising WebDriverServlet
+07:03:17.713 INFO [SeleniumServer.boot] - Selenium Server is up and running on port 4444
+```
+
+この段階で以下のように，`RSelenium::remoteDriver()`を使うと，Seleniumuと接続したリモート・ドライバ`rem`でブラウザを操作できるようになる．
+
+ところで，気づかないことがほとんどだが，GoogleChromeは結構頻繁にバージョンアップされている．
+久しぶりにSeleniumでスクレイピングしたときに，エラーが発生したらGoogleChromeのドライバが古くなっている可能性がある．
+
+```{r}
+rem <- RSelenium::remoteDriver(port = 4444L, browserName = "chrome")
+rem$open() # ブラウザを開く
+  # 指定のURLを開く
+usl <- "https://scholar.google.com/"
+rem$navigate(url)
+```
+
+指定したページを開くことができれば，その次はHTMLを操作する．
+検索文字列を入力して，検索ボタンをクリックする．
+以下では，検索文字列の入力はremが持つ関数を用いて，検索ボタンのクリックはJavaScriptを活用する．
+
+```{r}
+  # rem$findElement()で要素を取得して，その要素に文字列を設定
+rem$findElement("name", "q")$sendKeysToElement(list("machine learning"))
+  # 以下でも同じ
+  # scr <- "document.getElementById('gs_hdr_tsi').value = 'machine learning';"
+  # rem$executeScript(scr)
+
+  # 検索ボタンをクリック(JavaScriptを実行)
+scr <- "document.getElementById('gs_hdr_tsb').click();"
+rem$executeScript(scr)
+  # 以下でも同じ
+  # rem$findElement("id", "gs_hdr_tsb")$clickElement()
+
+citation <- 
+  rem$getPageSource() %>%
+    `[[`(1) %>%
+    xml2::read_html() %>%
+    rvest::html_table() %>%
+    `[[`(1)
+
+  # 単数形：1つ目の文献
+rem$findElement("class", "gs_or_cit")$clickElement()
+  # 複数形：全部の文献，indexで個別を指定
+rem$findElements("class", "gs_or_cit")[[2]]$clickElement()
+
+  #     rvest::html_elements("#gs_cit-bdy") %>%
+
+
+
+  # 以下でも同じ
+  # src <- "document.getElementsByClassName('gs_or_cit')[0].click();" 
+  # rem$executeScript(scr)
+
+  # document.getElementById("gs_cit-bdy") // 文献情報のミニウィンドウ(?)の部分
+```
+
+
+
+```{r}
+rem$close()
+shell("taskkill /f /im java.exe")
+```
+
+
+
+```{r}
+  # selenium <- ""
+start_selenium <- function(selenium){
+  cmd <- paste0("start java -jar ", selenium)
+  shell(cmd)
+  Sys.sleep(5)
+  rem <- RSelenium::remoteDriver(port = 4444L, browserName = "chrome")
+  rem$open()
+  return(rem)
+}
+```
+
+
+
+
+```{r}
+  # たぶんRSeleniumでやらないとダメ
+document.getElementsByClassName("gs_or_cit")[0].click(); // 「引用」をクリック
+document.getElementById("gs_cit-bdy") // 文献情報のミニウィンドウ(?)の部分
+
+  # rvest::html_elements(resp, ".gs_or_cit")
+  # rvest::html_elements(resp, ".gs_or_btn")
+  # rvest::html_elements(resp, ".gs_nph")
+  # document.getElementById("gs_hdr_tsi").value = "paddy fields";
+  # document.getElementById("gs_hdr_tsb").click();
+```
+
+
+
+
+
+
+
+　
+
+## memo
+
+```{r, eval = FALSE}
+  # str(rem)
+  #    acceptAlert, addCookie, buttondown, buttonup, checkError, checkStatus, click, close, closeall, closeServer, closeWindow, deleteAllCookies,
+  #    deleteCookieNamed, dismissAlert, doubleclick, errorDetails, executeAsyncScript, executeScript, findElement, findElements, getActiveElement,
+  #    getAlertText, getAllCookies, getCurrentUrl, getCurrentWindowHandle, getLogTypes, getPageSource, getSession, getSessions, getStatus, getTitle,
+  #    getWindowHandles, getWindowPosition, getWindowSize, goBack, goForward, initialize, initialize#errorHandler, log, maxWindowSize,
+  #    mouseMoveToLocation, navigate, obscureUrlPassword, open, phantomExecute, queryRD, quit, refresh, screenshot, sendKeysToActiveElement,
+  #    sendKeysToAlert, setAsyncScriptTimeout, setImplicitWaitTimeout, setTimeout, setWindowPosition, setWindowSize, show#envRefClass, showErrorClass,
+  #    switchToFrame, switchToWindow
+
+ls("package:scholar")
+ls("package:rvest")
+  #  [1] "%>%"                 "back"                "follow_link"         "forward"             "google_form"         "guess_encoding"     
+  #  [7] "html_attr"           "html_attrs"          "html_children"       "html_element"        "html_elements"       "html_encoding_guess"
+  # [13] "html_form"           "html_form_set"       "html_form_submit"    "html_name"           "html_node"           "html_nodes"         
+  # [19] "html_session"        "html_table"          "html_text"           "html_text2"          "is.session"          "jump_to"            
+  # [25] "minimal_html"        "read_html"           "repair_encoding"     "session"             "session_back"        "session_follow_link"
+  # [31] "session_forward"     "session_history"     "session_jump_to"     "session_submit"      "set_values"          "submit_form"        
+  # [37] "url_absolute"        "xml_node"            "xml_nodes"           "xml_tag"            
+```
